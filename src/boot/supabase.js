@@ -1,4 +1,4 @@
-// src/boot/supabase.js
+ // src/boot/supabase.js
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://escrgndsjsmpjduqqgbv.supabase.co'

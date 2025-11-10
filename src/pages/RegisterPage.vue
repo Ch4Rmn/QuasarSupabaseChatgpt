@@ -35,6 +35,8 @@ const password = ref('')
 
 const handleRegister = async () => {
   await auth.register(email.value, password.value)
-  if (auth.user) router.push('/')
+  if (auth.user) router.push({ name: 'emailVerification', query: { email: email.value } })
+  // if (auth.user) router.push('/')
+  // else router.push('auth/email-verification')
 }
 </script>
