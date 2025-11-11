@@ -6,12 +6,12 @@
       </q-card-section>
 
       <q-card-section>
-        <q-input v-model="email" label="Email" outlined />
+        <q-input v-model="password" label="Password" outlined />
         <q-btn
           label="Send"
           color="primary"
           class="full-width q-mt-md"
-          @click="handleForgetPassword"
+          @click="handleForgetPasswordUpdate"
           :loading="auth.loading"
         />
         <div class="q-mt-md">
@@ -29,12 +29,12 @@ import { useAuthStore } from 'stores/auth'
 
 const auth = useAuthStore()
 // const router = useRouter()
-const email = ref('')
+const password = ref('')
 
-const handleForgetPassword = async () => {
+const handleForgetPasswordUpdate = async () => {
   try {
-    await auth.sendForgetPassword(email.value)
-    alert(`Password reset link sent to ${email.value}`)
+    await auth.forgetPasswordUpdate(password.value)
+    alert(`Password reset link sent to ${password.value}`)
   } catch (err) {
     alert('Error sending reset email: ' + err.message)
   }

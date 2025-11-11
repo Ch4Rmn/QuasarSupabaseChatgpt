@@ -64,14 +64,57 @@ export const useAuthStore = defineStore('auth', {
       if (error) console.error('Google login error:', error)
       return data
     },
-  },
 
-  async getSession() {
-    const { data, error } = await supabase.auth.getSession()
-    if (error) {
-      console.error('Get session error:', error.message)
-      return null
-    }
-    return data.session
+    // start
+    async getSession() {
+      const { data, error } = await supabase.auth.getSession()
+      if (error) {
+        console.error('Get session error:', error.message)
+        return null
+      }
+      return data.session
+    },
+
+    async listenToAuth() {
+      // This will keep user data even after refresh
+      supabase.auth.onAuthStateChange((_event, session) => {
+        this.user = session?.user || null
+      })
+    },
+    // end
+
+    async sendForgetPassword(email) {
+      this.loading = true
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://localhost:9001/auth/forgetPasswordUpdate',
+      })
+      this.loading = false
+
+      if (error) {
+        console.error('Password reset error:', error.message)
+        throw error
+      }
+
+      console.log('Reset email sent:', data)
+      return data
+    },
+
+    async forgetPasswordUpdate(password) {
+      this.loading = true
+      const { data, error } = await supabase.auth.updateUser({
+        password,
+      })
+      this.loading = false
+      if (error) {
+        console.error('(Error)Password reset Update error:', error.message)
+        throw error
+      }
+
+      console.log('Password reset Update:', data)
+      return data
+    },
+    //     const { data, error } = await supabase.auth.updateUser({
+    //   password: new_password
+    // })
   },
 })

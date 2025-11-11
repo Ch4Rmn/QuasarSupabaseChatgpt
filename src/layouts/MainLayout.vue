@@ -11,6 +11,26 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- Footer Bar -->
+    <q-footer bordered class="bg-white text-primary">
+      <q-tabs align="justify" dense active-color="primary" indicator-color="transparent">
+        <!-- Home -->
+        <q-route-tab icon="home" label="Home" to="/" exact />
+
+        <!-- Links -->
+        <q-route-tab icon="link" label="Links" to="/links" />
+
+        <!-- Search -->
+        <q-route-tab icon="search" label="Search" to="/search" />
+
+        <!-- About -->
+        <q-route-tab icon="info" label="About" to="/about" />
+
+        <!-- Profile -->
+        <q-route-tab icon="person" label="Profile" to="/profile" />
+      </q-tabs>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -26,3 +46,11 @@ const logout = async () => {
   router.push('/auth/login')
 }
 </script>
+
+<style scoped>
+.q-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+</style>

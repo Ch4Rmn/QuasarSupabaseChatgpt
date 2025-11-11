@@ -23,6 +23,7 @@
         />
         <div class="q-mt-md">
           <router-link to="/auth/register">Create account</router-link>
+          <router-link to="/auth/forgetPassword" class="float-right">Forget password</router-link>
         </div>
       </q-card-section>
     </q-card>

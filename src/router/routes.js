@@ -6,6 +6,12 @@ import RegisterPage from 'pages/RegisterPage.vue'
 import HomePage from 'pages/HomePage.vue'
 import { supabase } from 'src/boot/supabase'
 import EmailVertifaction from 'src/pages/EmailVertifaction.vue'
+import ForgetPassword from 'src/pages/ForgetPassword.vue'
+import ForgetPasswordUpdate from 'src/pages/ForgetPasswordUpdate.vue'
+import ProfilePage from 'src/pages/ProfilePage.vue'
+// import AboutPage from 'src/pages/subpages/AboutPage.vue'
+// import LinksPage from 'src/pages/subpages/LinksPage.vue'
+// import SearchPage from 'src/pages/subpages/SearchPage.vue'
 
 const requireAuth = async (to, from, next) => {
   const { data, error } = await supabase.auth.getSession()
@@ -25,6 +31,12 @@ const routes = [
       { path: 'login', component: LoginPage },
       { path: 'register', component: RegisterPage },
       { path: 'email-verification', name: 'emailVerification', component: EmailVertifaction },
+      { path: 'forgetPassword', name: 'forgetPassword', component: ForgetPassword },
+      {
+        path: 'forgetPasswordUpdate',
+        name: 'forgetPasswordUpdate',
+        component: ForgetPasswordUpdate,
+      },
     ],
   },
   {
@@ -33,6 +45,10 @@ const routes = [
     beforeEnter: requireAuth,
     children: [
       { path: '', name: 'home', component: HomePage },
+      // { path: 'about', name: 'about', component: AboutPage },
+      // { path: 'links', name: 'links', component: LinksPage },
+      // { path: 'search', name: 'search', component: SearchPage },
+      { path: 'profile', name: 'profile', component: ProfilePage },
       // { path: '', name: 'about', component: HomePage },
     ],
   },
