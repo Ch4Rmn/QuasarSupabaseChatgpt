@@ -39,6 +39,11 @@ export default defineConfig((ctx) => {
       },
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
+      env: {
+        SUPABASE_URL: 'https://escrgndsjsmpjduqqgbv.supabase.co',
+        SUPABASE_KEY:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzY3JnbmRzanNtcGpkdXFxZ2J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2OTA0MjcsImV4cCI6MjA3ODI2NjQyN30.Uq22vF_jfp8GTpEGxjtlmrgTh8d5jw8Ox8_rfaZT5d4',
+      },
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -109,7 +114,7 @@ export default defineConfig((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Notify'],
     },
 
     // animations: 'all', // --- includes all animations

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { supabase } from 'src/boot/supabase'
+import { Notify } from 'quasar'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -18,9 +19,22 @@ export const useAuthStore = defineStore('auth', {
 
       if (error) {
         console.error('Login error:', error.message)
-        alert('❌ ' + error.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
       } else {
         this.user = data.user
+        Notify.create({
+          type: 'positive',
+          message: 'Login success!',
+          caption: 'Welcome back, ' + email,
+
+          // classes: 'full-width text-center',
+          timeout: 5000,
+          icon: 'check_circle',
+        })
         console.log('✅ Login success:', data)
       }
     },
@@ -35,9 +49,23 @@ export const useAuthStore = defineStore('auth', {
 
       if (error) {
         console.error('Register error:', error.message)
-        alert('❌ ' + error.message)
+        // alert('❌ ' + error.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
       } else {
         this.user = data.user
+        Notify.create({
+          type: 'positive',
+          message: 'register',
+          caption: 'register ' + email,
+
+          // classes: 'full-width text-center',
+          timeout: 10000,
+          icon: 'check_circle',
+        })
         console.log('✅ Register success:', data)
       }
     },
@@ -52,8 +80,22 @@ export const useAuthStore = defineStore('auth', {
       if (data?.user) {
         this.user = data.user
       }
+      Notify.create({
+        type: 'positive',
+        message: 'getUser',
+        caption: 'getUser ',
+
+        // classes: 'full-width text-center',
+        timeout: 3000,
+        icon: 'check_circle',
+      })
       if (error) {
-        alert(error.message)
+        // alert(error.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
       }
     },
 
@@ -61,7 +103,21 @@ export const useAuthStore = defineStore('auth', {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
       })
+      Notify.create({
+        type: 'positive',
+        message: 'loginWithGoogle',
+        caption: 'loginWithGoogle ',
+
+        // classes: 'full-width text-center',
+        timeout: 3000,
+        icon: 'check_circle',
+      })
       if (error) console.error('Google login error:', error)
+      Notify.create({
+        progress: true,
+        type: 'negative',
+        message: error.message,
+      })
       return data
     },
 
@@ -70,8 +126,14 @@ export const useAuthStore = defineStore('auth', {
       const { data, error } = await supabase.auth.getSession()
       if (error) {
         console.error('Get session error:', error.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
         return null
       }
+
       return data.session
     },
 
@@ -92,10 +154,24 @@ export const useAuthStore = defineStore('auth', {
 
       if (error) {
         console.error('Password reset error:', error.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
         throw error
       }
 
       console.log('Reset email sent:', data)
+      Notify.create({
+        type: 'positive',
+        message: 'sendForgetPassword',
+        caption: 'sendForgetPassword',
+
+        // classes: 'full-width text-center',
+        timeout: 3000,
+        icon: 'check_circle',
+      })
       return data
     },
 
@@ -106,10 +182,23 @@ export const useAuthStore = defineStore('auth', {
       })
       this.loading = false
       if (error) {
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message,
+        })
         console.error('(Error)Password reset Update error:', error.message)
         throw error
       }
+      Notify.create({
+        type: 'positive',
+        message: 'forgetPasswordUpdate!',
+        caption: 'forgetPasswordUpdate, ',
 
+        // classes: 'full-width text-center',
+        timeout: 3000,
+        icon: 'check_circle',
+      })
       console.log('Password reset Update:', data)
       return data
     },
