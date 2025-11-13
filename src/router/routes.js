@@ -8,9 +8,9 @@ import { supabase } from 'src/boot/supabase'
 import EmailVertifaction from 'src/pages/EmailVertifaction.vue'
 import ForgetPassword from 'src/pages/ForgetPassword.vue'
 import ForgetPasswordUpdate from 'src/pages/ForgetPasswordUpdate.vue'
-import ProfilePage from 'src/pages/ProfilePage.vue'
-// import AboutPage from 'src/pages/subpages/AboutPage.vue'
-// import LinksPage from 'src/pages/subpages/LinksPage.vue'
+import ProfilePage from 'src/pages/subpages/ProfilePage.vue'
+// import AboutPage from 'src/pages/subpages/SavedPage.vue'
+import LinksPage from 'src/pages/subpages/LinksPage.vue'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 
 const requireAuth = async (to, from, next) => {
@@ -46,7 +46,7 @@ const routes = [
     children: [
       { path: '', name: 'home', component: HomePage },
       // { path: 'about', name: 'about', component: AboutPage },
-      // { path: 'links', name: 'links', component: LinksPage },
+      { path: 'links', name: 'links', component: LinksPage },
       // { path: 'search', name: 'search', component: SearchPage },
       { path: 'profile', name: 'profile', component: ProfilePage },
       // { path: '', name: 'about', component: HomePage },

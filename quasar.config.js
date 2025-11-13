@@ -6,6 +6,9 @@ import { fileURLToPath } from 'node:url'
 
 export default defineConfig((ctx) => {
   return {
+    bin: {
+      linuxAndroidStudio: '/snap/android-studio/209/bin/studio.sh',
+    },
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
 
