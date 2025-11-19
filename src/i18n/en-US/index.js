@@ -4,4 +4,11 @@
 export default {
   failed: 'Action failed',
   success: 'Action was successful',
+  home: 'Home',
+  links: 'Links',
+  search: 'Search',
+  saved: 'Saved',
+  user: 'User',
+  about: 'About',
+  business: 'Business',
 }

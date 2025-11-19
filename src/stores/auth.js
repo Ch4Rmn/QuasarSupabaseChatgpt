@@ -39,12 +39,29 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async register(email, password) {
+    async register(email, password, name, age, gender, religion, company, role) {
       this.loading = true
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
       })
+      if (data?.user) {
+        const { error: insertError } = await supabase.from('users').insert({
+          user_id: data.user.id,
+          email,
+          name,
+          age,
+          gender,
+          religion,
+          company,
+          role,
+        })
+
+        if (insertError) {
+          console.error('Profile insert error:', insertError.message)
+          throw insertError
+        }
+      }
       this.loading = false
 
       if (error) {
@@ -61,7 +78,6 @@ export const useAuthStore = defineStore('auth', {
           type: 'positive',
           message: 'register',
           caption: 'register ' + email,
-
           // classes: 'full-width text-center',
           timeout: 10000,
           icon: 'check_circle',

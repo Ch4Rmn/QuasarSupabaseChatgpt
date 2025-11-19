@@ -11,6 +11,9 @@ import ForgetPasswordUpdate from 'src/pages/ForgetPasswordUpdate.vue'
 import ProfilePage from 'src/pages/subpages/ProfilePage.vue'
 // import AboutPage from 'src/pages/subpages/SavedPage.vue'
 import LinksPage from 'src/pages/subpages/LinksPage.vue'
+import BusinessPage from 'src/pages/subpages/BusinessPage.vue'
+import MapPage from 'src/pages/subpages/MapPage.vue'
+// import SearchPage from 'src/pages/subpages/SearchPage.vue'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 
 const requireAuth = async (to, from, next) => {
@@ -49,6 +52,8 @@ const routes = [
       { path: 'links', name: 'links', component: LinksPage },
       // { path: 'search', name: 'search', component: SearchPage },
       { path: 'profile', name: 'profile', component: ProfilePage },
+      { path: 'businessList', name: 'business', component: BusinessPage },
+      { path: 'map', name: 'map', component: MapPage },
       // { path: '', name: 'about', component: HomePage },
     ],
   },
