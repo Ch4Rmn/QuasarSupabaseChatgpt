@@ -13,30 +13,45 @@ export const useUserApiStore = defineStore('userapi', {
   actions: {
     async list(table) {
       try {
-        // 1️⃣ Check localStorage cache first
+        // 1️ Check cache
         const cached = localStorage.getItem(`cache_${table}`)
         if (cached) {
-          console.log('📦 Loaded from cache')
           this.cache[table] = JSON.parse(cached)
+
+          Notify.create({
+            progress: true,
+            type: 'positive',
+            message: 'Loaded from cache!',
+          })
+
           return this.cache[table]
         }
 
-        // 2️⃣ No cache → fetch from Supabase
+        // 2️ Fetch from Supabase
         this.loading = true
         const { data, error } = await supabase.from(table).select('*')
         this.loading = false
 
         if (error) throw new Error(error.message)
 
-        // 3️⃣ Save cache in both Pinia + localStorage
+        Notify.create({
+          progress: true,
+          type: 'positive',
+          message: 'Loaded from Supabase!',
+        })
+
+        // 3️ Save to cache
         this.cache[table] = data
         localStorage.setItem(`cache_${table}`, JSON.stringify(data))
 
-        console.log('🌐 Loaded from Supabase')
         return data
       } catch (err) {
         this.loading = false
-        console.error(err.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: err.message || 'Something went wrong',
+        })
       }
     },
 

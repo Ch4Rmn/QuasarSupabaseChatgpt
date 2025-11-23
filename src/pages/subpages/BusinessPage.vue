@@ -278,11 +278,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useQuasar, exportFile } from 'quasar'
 import { useUserApiStore } from 'src/stores/user'
 import { useAuthStore } from 'stores/auth'
 import { useRouter } from 'vue-router'
+import { supabase } from 'src/boot/supabase'
 
 const pagination = ref({
   page: 1,
@@ -298,6 +299,7 @@ const $q = useQuasar()
 const auth = useAuthStore()
 const user = useUserApiStore()
 const userRole = ref(null)
+const realtimeChannel = ref(null)
 
 const isDesktop = computed(() => $q.platform.is.desktop)
 console.log('isDesktop', isDesktop.value)
@@ -371,6 +373,25 @@ const handleList = async () => {
   }
 }
 
+async function startRealtime() {
+  if (realtimeChannel.value) return
+
+  realtimeChannel.value = supabase
+    .channel('business_list_realtime')
+    .on('postgres_changes', { event: '*', table: 'business_list' }, async () => {
+      userStore.clearCache('business_list')
+      await handleList()
+    })
+    .subscribe()
+}
+
+async function stopRealtime() {
+  if (!realtimeChannel.value) return
+  await supabase.removeChannel(realtimeChannel.value)
+  realtimeChannel.value = null
+  console.log('Realtime stopped')
+}
+
 // export csv
 function wrapCsvValue(val, formatFn, row) {
   let formatted = formatFn !== void 0 ? formatFn(val, row) : val
@@ -428,5 +449,10 @@ const refresh = async () => {
 onMounted(() => {
   loadUserRole()
   handleList() //  auto load real data
+  startRealtime()
+})
+
+onBeforeUnmount(() => {
+  stopRealtime()
 })
 </script>
