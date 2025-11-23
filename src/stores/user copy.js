@@ -7,42 +7,50 @@ export const useUserApiStore = defineStore('userapi', {
   state: () => ({
     data: null,
     loading: false,
-    cache: {},
   }),
 
   actions: {
     async list(table) {
       try {
-        // 1️⃣ Check localStorage cache first
-        const cached = localStorage.getItem(`cache_${table}`)
-        if (cached) {
-          console.log('📦 Loaded from cache')
-          this.cache[table] = JSON.parse(cached)
-          return this.cache[table]
-        }
-
-        // 2️⃣ No cache → fetch from Supabase
         this.loading = true
         const { data, error } = await supabase.from(table).select('*')
         this.loading = false
+        if (data) this.channel(table)
 
         if (error) throw new Error(error.message)
 
-        // 3️⃣ Save cache in both Pinia + localStorage
-        this.cache[table] = data
-        localStorage.setItem(`cache_${table}`, JSON.stringify(data))
-
-        console.log('🌐 Loaded from Supabase')
+        Notify.create({
+          progress: true,
+          type: 'positive',
+          message: 'Data loaded successfully!',
+        })
         return data
       } catch (err) {
         this.loading = false
-        console.error(err.message)
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: err.message || 'Something went wrong',
+        })
       }
     },
 
-    async clearCache(table) {
-      delete this.cache[table]
-      localStorage.removeItem(`cache_${table}`)
+    async channel(table) {
+      try {
+        supabase
+          .channel('poi-channel')
+          .on('postgres_changes', { event: '*', schema: 'public', table: table }, (payload) => {
+            console.log('Change received!', payload)
+            this.data = payload.new
+          })
+          .subscribe()
+      } catch (error) {
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: error.message || 'Something went wrong',
+        })
+      }
     },
 
     // async getRole (table,id) {

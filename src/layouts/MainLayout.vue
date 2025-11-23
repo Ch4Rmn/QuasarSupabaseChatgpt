@@ -12,6 +12,7 @@
             <!-- </q-tab> -->
           </q-toolbar-title>
           <q-space />
+
           <q-select
             v-model="locale"
             :options="langs"

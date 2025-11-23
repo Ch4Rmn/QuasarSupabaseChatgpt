@@ -213,6 +213,8 @@
             label="Create"
             class="q-mr-md"
           />
+          <q-btn icon="refresh" @click="refresh" color="primary" label="Refresh" class="q-mr-md" />
+
           <q-btn
             v-if="isDesktop && userRole == 'admin'"
             color="primary"
@@ -415,6 +417,12 @@ const exportTable = () => {
       icon: 'warning',
     })
   }
+}
+
+const refresh = async () => {
+  userStore.clearCache('business_list')
+  rows.value = await userStore.list('business_list')
+  // alert('click')
 }
 
 onMounted(() => {
