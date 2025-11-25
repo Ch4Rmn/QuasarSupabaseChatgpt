@@ -61,24 +61,56 @@
         <router-view />
       </q-page-container>
 
-      <!-- Footer Bar -->
       <q-footer bordered class="bg-white text-primary">
-        <q-tabs align="justify" dense active-color="primary" indicator-color="transparent">
-          <!-- Home -->
-          <q-route-tab icon="home" :label="$t('home')" to="/" exact />
+        <q-tabs align="justify" dense active-color="white" indicator-color="transparent">
+          <q-route-tab
+            icon="home"
+            :label="$t('home')"
+            to="/"
+            exact
+            active-class="tab-active"
+            ripple
+          />
 
-          <!-- Links -->
-          <q-route-tab icon="link" :label="$t('links')" to="/links" />
+          <q-route-tab
+            icon="link"
+            :label="$t('links')"
+            to="/links"
+            active-class="tab-active"
+            ripple
+          />
 
-          <q-route-tab icon="category" :label="$t('business')" to="/businessList" />
-          <!-- Search -->
-          <!-- <q-route-tab icon="search" :label="$t('search')" to="/search" /> -->
+          <q-route-tab
+            icon="category"
+            :label="$t('business')"
+            to="/businessList"
+            active-class="tab-active"
+            ripple
+          />
 
-          <!-- About -->
-          <q-route-tab icon="info" :label="$t('about')" to="/about" />
+          <q-route-tab
+            icon="home work"
+            :label="$t('address')"
+            to="/addressList"
+            active-class="tab-active"
+            ripple
+          />
 
-          <!-- Profile -->
-          <q-route-tab icon="person" :label="$t('user')" to="/profile" />
+          <q-route-tab
+            icon="info"
+            :label="$t('about')"
+            to="/about"
+            active-class="tab-active"
+            ripple
+          />
+
+          <q-route-tab
+            icon="person"
+            :label="$t('user')"
+            to="/profile"
+            active-class="tab-active"
+            ripple
+          />
         </q-tabs>
       </q-footer>
     </q-layout>
@@ -144,5 +176,14 @@ const logout = async () => {
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+.tab-active {
+  /* background: linear-gradient(135deg, #1976d2, #2196f3); */
+  background: black;
+  color: #fff !important;
+  border-radius: px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
 }
 </style>
