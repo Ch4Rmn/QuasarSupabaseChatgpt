@@ -66,7 +66,7 @@
     <h5 class="text-center">copyright by dpsmap</h5>
   </q-page>
 </template>
-
+/var/www/frontend/QuasarSupabaseChatgpt/src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk
 <script setup>
 // import { ref } from 'vue';
 import { useAuthStore } from 'stores/auth'
