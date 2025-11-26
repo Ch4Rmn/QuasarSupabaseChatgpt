@@ -117,7 +117,7 @@ export default defineConfig((ctx) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'AddressbarColor'],
+      plugins: ['Notify', 'AddressbarColor', 'Dialog'],
     },
 
     // animations: 'all', // --- includes all animations

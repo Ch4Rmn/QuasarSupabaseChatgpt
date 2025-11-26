@@ -13,6 +13,7 @@
         option-value="value"
         emit-value
         map-options
+        clearable
         class="min-width-200"
         placeholder="Select Country"
       />
@@ -28,8 +29,8 @@
         :loading="loading"
         emit-value
         map-options
+        clearable
       />
-
       <q-select
         outlined
         dense
@@ -40,8 +41,9 @@
         option-value="value"
         emit-value
         map-options
+        clearable
       />
-
+      <!--  -->
       <q-select
         outlined
         dense
@@ -50,14 +52,15 @@
         :options="homeNumberOptions"
         option-label="label"
         option-value="value"
+        :loading="loading"
         emit-value
         map-options
+        clearable
         class="min-width-200"
         placeholder="Select HomeNumber"
       />
     </div>
 
-    <!-- TABLE -->
     <q-table
       title="POI List"
       flat
@@ -68,8 +71,8 @@
       :rows="filteredRows"
       :columns="columns"
       row-key="ID"
-      @row-click="showDetail"
     >
+      <!-- Search bar in table header -->
       <template v-slot:top-right>
         <q-input
           bordered
@@ -81,56 +84,49 @@
           outlined
           class="q-ml-md"
         >
-          <template #append><q-icon name="search" /></template>
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
         </q-input>
       </template>
+
+      <template v-slot:body-cell-Longitude="props">
+        <q-td :props="props">
+          <q-btn flat dense color="primary" @click="goMap(props.row.Latitude, props.row.Longitude)">
+            {{ props.row.Longitude }}
+          </q-btn>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-Latitude="props">
+        <q-td :props="props">
+          <q-btn flat dense color="primary" @click="goMap(props.row.Latitude, props.row.Longitude)">
+            {{ props.row.Latitude }}
+          </q-btn>
+        </q-td>
+      </template>
     </q-table>
-
-    <!-- ✔ Dialog -->
-    <q-dialog v-model="dialog">
-      <q-card>
-        <q-card-section class="text-h6 text-primary"> Address Details </q-card-section>
-
-        <q-card-section v-if="selectedRow">
-          <div><strong>ID:</strong> {{ selectedRow.ID }}</div>
-          <div><strong>DPS ID:</strong> {{ selectedRow.DPS_ID }}</div>
-          <div><strong>Home Number:</strong> {{ selectedRow.HN_Eng }}</div>
-          <div><strong>Street:</strong> {{ selectedRow.St_N_Eng }}</div>
-          <div><strong>Ward:</strong> {{ selectedRow.Ward_N_Eng }}</div>
-          <div><strong>Township:</strong> {{ selectedRow.Tsp_N_Eng }}</div>
-          <div><strong>District:</strong> {{ selectedRow.Dist_N_Eng }}</div>
-          <div><strong>Country:</strong> {{ selectedRow.Country_N }}</div>
-          <div><strong>Postal Code:</strong> {{ selectedRow.Postal_Cod }}</div>
-          <div><strong>Latitude:</strong> {{ selectedRow.Latitude }}</div>
-          <div><strong>Longitude:</strong> {{ selectedRow.Longitude }}</div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Close" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
+
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
 
-// const router = useRouter()
+const router = useRouter()
 const userStore = useUserApiStore()
-
 const rows = ref([])
 const loading = ref(false)
 const filter = ref('')
 
-// Select models
+// Select box models
 const selectedCountry = ref(null)
 const selectedTownship = ref(null)
 const selectedStreet = ref(null)
 const selectedHomeNumber = ref(null)
 
-// TABLE columns
+// Table columns
 const columns = [
   { name: 'ID', label: 'ID', field: 'ID', align: 'left' },
   { name: 'DPS_ID', label: 'DPS ID', field: 'DPS_ID', align: 'left' },
@@ -151,35 +147,35 @@ const pagination = ref({
   rowsPerPage: 25,
 })
 
-/* ------------------ SELECT OPTIONS ------------------ */
+// Computed options for select boxes
 const countryOptions = computed(() =>
   [...new Set(rows.value.map((r) => r.Country_N))]
-    .filter((v) => v)
+    .filter((v) => v !== null && v !== undefined && v !== '')
     .map((v) => ({ label: v, value: v })),
 )
 
-const townshipOptions = computed(() =>
-  rows.value
+const townshipOptions = computed(() => {
+  return rows.value
     .filter((r) => !selectedCountry.value || r.Country_N === selectedCountry.value)
     .map((r) => r.Tsp_N_Eng)
-    .filter((v, i, arr) => v && arr.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v })),
-)
+    .filter((v, i, a) => v && a.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v }))
+})
 
-const streetOptions = computed(() =>
-  rows.value
+const streetOptions = computed(() => {
+  return rows.value
     .filter(
       (r) =>
         (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
         (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value),
     )
     .map((r) => r.St_N_Eng)
-    .filter((v, i, arr) => v && arr.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v })),
-)
+    .filter((v, i, a) => v && a.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v }))
+})
 
-const homeNumberOptions = computed(() =>
-  rows.value
+const homeNumberOptions = computed(() => {
+  return rows.value
     .filter(
       (r) =>
         (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
@@ -187,43 +183,46 @@ const homeNumberOptions = computed(() =>
         (!selectedStreet.value || r.St_N_Eng === selectedStreet.value),
     )
     .map((r) => r.HN_Eng)
-    .filter((v, i, arr) => v && arr.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v })),
-)
+    .filter((v, i, a) => v && a.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v }))
+})
 
-/* ------------------ FILTERED ROWS ------------------ */
+// Filtered rows based on select boxes
 const filteredRows = computed(() =>
-  rows.value.filter(
-    (r) =>
+  rows.value.filter((r) => {
+    return (
       (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
       (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value) &&
       (!selectedStreet.value || r.St_N_Eng === selectedStreet.value) &&
-      (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value),
-  ),
+      (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value)
+    )
+  }),
 )
 
-/* ------------------ DIALOG ------------------ */
-const dialog = ref(false)
-const selectedRow = ref(null)
-
-const showDetail = (event, row) => {
-  selectedRow.value = row
-  dialog.value = true
+const goMap = (lat, lng) => {
+  router.push(`/map?lat=${lat}&lng=${lng}`)
 }
 
-/* ------------------ LOAD DATA ------------------ */
+// Load data
 const handleList = async () => {
   loading.value = true
   try {
     const data = await userStore.list('address_list')
+    // console.log('Data from API:', data)
     rows.value = Array.isArray(data) ? data : []
+    // console.log('ROWS LENGTH:', rows.value.length)
+    // console.log('FIRST ROW:', rows.value[0])
   } catch (err) {
-    console.error(err)
+    console.error('handleList error', err)
     rows.value = []
   } finally {
     loading.value = false
   }
 }
+
+// console.log('ONE ROW:', rows.value[0])
+
+// console.log(`data is row` + rows.value[0])
 
 onMounted(async () => {
   await handleList()
