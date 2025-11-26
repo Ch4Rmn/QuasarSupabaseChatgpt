@@ -154,47 +154,32 @@ const countryOptions = computed(() =>
     .map((v) => ({ label: v, value: v })),
 )
 
-const townshipOptions = computed(() => {
-  return rows.value
-    .filter((r) => !selectedCountry.value || r.Country_N === selectedCountry.value)
-    .map((r) => r.Tsp_N_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+const townshipOptions = computed(() =>
+  [...new Set(rows.value.map((r) => r.Tsp_N_Eng))]
+    .filter((v) => v !== null && v !== undefined && v !== '')
+    .map((v) => ({ label: v, value: v })),
+)
 
-const streetOptions = computed(() => {
-  return rows.value
-    .filter(
-      (r) =>
-        (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
-        (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value),
-    )
-    .map((r) => r.St_N_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+const streetOptions = computed(() =>
+  [...new Set(rows.value.map((r) => r.St_N_Eng))]
+    .filter((v) => v !== null && v !== undefined && v !== '')
+    .map((v) => ({ label: v, value: v })),
+)
 
-const homeNumberOptions = computed(() => {
-  return rows.value
-    .filter(
-      (r) =>
-        (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
-        (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value) &&
-        (!selectedStreet.value || r.St_N_Eng === selectedStreet.value),
-    )
-    .map((r) => r.HN_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+const homeNumberOptions = computed(() =>
+  [...new Set(rows.value.map((r) => r.HN_Eng))]
+    .filter((v) => v !== null && v !== undefined && v !== '')
+    .map((v) => ({ label: v, value: v })),
+)
 
 // Filtered rows based on select boxes
 const filteredRows = computed(() =>
-  rows.value.filter((r) => {
+  rows.value.filter((row) => {
     return (
-      (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
-      (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value) &&
-      (!selectedStreet.value || r.St_N_Eng === selectedStreet.value) &&
-      (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value)
+      (!selectedCountry.value || row.Country_N === selectedCountry.value) &&
+      (!selectedTownship.value || row.Tsp_N_Eng === selectedTownship.value) &&
+      (!selectedStreet.value || row.St_N_Eng === selectedStreet.value) &&
+      (!selectedHomeNumber.value || row.HN_Eng === selectedHomeNumber.value)
     )
   }),
 )

@@ -96,13 +96,13 @@
             ripple
           />
 
-          <q-route-tab
+          <!-- <q-route-tab
             icon="info"
             :label="$t('about')"
             to="/about"
             active-class="tab-active"
             ripple
-          />
+          /> -->
 
           <q-route-tab
             icon="person"

@@ -5,7 +5,7 @@
       <q-avatar size="80px" class="q-mb-sm">
         <img src="../../assets/logo.png" alt="user" />
       </q-avatar>
-      <div class="text-h6 text-primary">{{ auth.user?.id }}</div>
+      <!-- <div class="text-h6 text-primary">{{ auth.user?.id }}</div> -->
       <div class="text-h6 text-primary">{{ auth.user?.email }}</div>
       <p>
         Email status:
