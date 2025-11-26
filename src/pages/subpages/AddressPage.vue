@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <!-- Filters -->
+    <!-- filter -->
     <div class="row q-gutter-md q-mb-md">
       <q-select
         outlined
@@ -57,7 +57,7 @@
       />
     </div>
 
-    <!-- TABLE -->
+    <!-- table -->
     <q-table
       title="POI List"
       flat
@@ -86,7 +86,7 @@
       </template>
     </q-table>
 
-    <!-- ✔ Dialog -->
+    <!-- dialog -->
     <q-dialog v-model="dialog">
       <q-card>
         <q-card-section class="text-h6 text-primary"> Address Details </q-card-section>
@@ -124,16 +124,15 @@ const rows = ref([])
 const loading = ref(false)
 const filter = ref('')
 
-// Select models
 const selectedCountry = ref(null)
 const selectedTownship = ref(null)
 const selectedStreet = ref(null)
 const selectedHomeNumber = ref(null)
 
-// TABLE columns
+// col
 const columns = [
-  { name: 'ID', label: 'ID', field: 'ID', align: 'left' },
-  { name: 'DPS_ID', label: 'DPS ID', field: 'DPS_ID', align: 'left' },
+  // { name: 'ID', label: 'ID', field: 'ID', align: 'left' },
+  // { name: 'DPS_ID', label: 'DPS ID', field: 'DPS_ID', align: 'left' },
   { name: 'HN_Eng', label: 'HN Eng', field: 'HN_Eng', align: 'left' },
   { name: 'HN_Myn', label: 'HN Myn', field: 'HN_Myn', align: 'left' },
   { name: 'Postal_Cod', label: 'Postal Code', field: 'Postal_Cod', align: 'left' },
@@ -151,7 +150,7 @@ const pagination = ref({
   rowsPerPage: 25,
 })
 
-/* ------------------ SELECT OPTIONS ------------------ */
+// options start
 const countryOptions = computed(() =>
   [...new Set(rows.value.map((r) => r.Country_N))]
     .filter((v) => v)
@@ -191,7 +190,7 @@ const homeNumberOptions = computed(() =>
     .map((v) => ({ label: v, value: v })),
 )
 
-/* ------------------ FILTERED ROWS ------------------ */
+// filter rows start
 const filteredRows = computed(() =>
   rows.value.filter(
     (r) =>
@@ -201,8 +200,9 @@ const filteredRows = computed(() =>
       (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value),
   ),
 )
+// filter rows end
 
-/* ------------------ DIALOG ------------------ */
+// dialog show start
 const dialog = ref(false)
 const selectedRow = ref(null)
 
@@ -210,8 +210,8 @@ const showDetail = (event, row) => {
   selectedRow.value = row
   dialog.value = true
 }
+// dialog show end
 
-/* ------------------ LOAD DATA ------------------ */
 const handleList = async () => {
   loading.value = true
   try {
