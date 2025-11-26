@@ -19,68 +19,150 @@
         </q-item-section>
       </q-item>
     </q-list>
-
-    <!-- <div class="q-pa-md">
-      <q-video :ratio="16 / 9" src="https://www.youtube.com/embed/k3_tw44QsZQ?rel=0" />
-    </div> -->
     <!--  -->
-    <!-- <div class="q-pa-md">
-      <q-stepper v-model="step" ref="stepper" color="primary" animated>
-        <q-step :name="1" title="Select campaign settings" icon="settings" :done="step > 1">
-          For each ad campaign that you create, you can control how much you're willing to spend on
-          clicks and conversions, which networks and geographical locations you want your ads to
-          show on, and more.
-        </q-step>
+    <div class="q-pa-md">
+      <q-carousel
+        swipeable
+        v-model:fullscreen="fullscreen"
+        animated
+        v-model="slide"
+        :autoplay="autoplay"
+        ref="carousel"
+        infinite
+      >
+        <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
+        <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
+        <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
+        <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
 
-        <q-step
-          :name="2"
-          title="Create an ad group"
-          caption="Optional"
-          icon="create_new_folder"
-          :done="step > 2"
-        >
-          An ad group contains one or more ads which target a shared set of keywords.
-        </q-step>
-
-        <q-step :name="3" title="Ad template" icon="assignment" disable>
-          This step won't show up because it is disabled.
-        </q-step>
-
-        <q-step :name="4" title="Create an ad" icon="add_comment">
-          Try out different ad text to see what brings in the most customers, and learn how to
-          enhance your ads using features like ad extensions. If you run into any problems with your
-          ads, find out how to tell if they're running and how to resolve approval issues.
-        </q-step>
-
-        <template v-slot:navigation>
-          <q-stepper-navigation>
+        <template v-slot:control>
+          <q-carousel-control position="bottom-left" :offset="[18, 18]">
             <q-btn
-              @click="$refs.stepper.next()"
-              color="primary"
-              :label="step === 4 ? 'Finish' : 'Continue'"
+              push
+              round
+              dense
+              color="white"
+              text-color="primary"
+              :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+              @click="fullscreen = !fullscreen"
+            />
+          </q-carousel-control>
+
+          <q-carousel-control
+            position="top-right"
+            :offset="[18, 18]"
+            class="text-white rounded-borders"
+            style="background: rgba(0, 0, 0, 0.3); padding: 4px 8px"
+          >
+            <q-toggle dense dark color="orange" v-model="autoplay" label="Auto Play" />
+          </q-carousel-control>
+
+          <q-carousel-control position="bottom-right" :offset="[18, 18]" class="q-gutter-xs">
+            <q-btn
+              push
+              round
+              dense
+              color="orange"
+              text-color="black"
+              icon="arrow_left"
+              @click="$refs.carousel.previous()"
             />
             <q-btn
-              v-if="step > 1"
-              flat
-              color="primary"
-              @click="$refs.stepper.previous()"
-              label="Back"
-              class="q-ml-sm"
+              push
+              round
+              dense
+              color="orange"
+              text-color="black"
+              icon="arrow_right"
+              @click="$refs.carousel.next()"
             />
-          </q-stepper-navigation>
+          </q-carousel-control>
         </template>
-      </q-stepper>
-    </div> -->
-    <!-- show example map -->
-    <!-- <div class="q-pa-md" style="max-width: 500px">
-      <q-toggle v-model="visible" label="Show Example Map" class="q-mb-md" />
+      </q-carousel>
+    </div>
+    <!--  -->
 
-      <q-slide-transition>
-        <div v-show="visible">
-          <img class="responsive" src="https://cdn.quasar.dev/img/quasar.jpg" />
-        </div>
-      </q-slide-transition>
-    </div> -->
+    <div class="q-pa-md row items-start q-gutter-md">
+      <q-card class="my-card" flat bordered>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+            <div class="text-overline">Overline</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+            <div class="text-caption text-grey">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua.
+            </div>
+          </q-card-section>
+
+          <q-card-section class="col-5 flex flex-center">
+            <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+          </q-card-section>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat round icon="event" />
+          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat color="primary"> Reserve </q-btn>
+        </q-card-actions>
+      </q-card>
+      <q-card class="my-card" flat bordered>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+            <div class="text-overline">Overline</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+            <div class="text-caption text-grey">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua.
+            </div>
+          </q-card-section>
+
+          <q-card-section class="col-5 flex flex-center">
+            <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+          </q-card-section>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <q-btn flat round icon="event" />
+          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat color="primary"> Reserve </q-btn>
+        </q-card-actions>
+      </q-card>
+    </div>
+
+    <!--  -->
+    <div class="overflow-hidden">
+      <q-resize-observer @resize="onResize" :debounce="0" />
+
+      <q-splitter
+        id="photos"
+        v-model="splitterModel"
+        :limits="[0, 100]"
+        :style="splitterStyle"
+        before-class="overflow-hidden"
+        after-class="overflow-hidden"
+      >
+        <template v-slot:before>
+          <img
+            src="https://cdn.quasar.dev/img/parallax1.jpg"
+            :width="width"
+            class="absolute-top-left"
+          />
+        </template>
+
+        <template v-slot:after>
+          <img
+            src="https://cdn.quasar.dev/img/parallax1-bw.jpg"
+            :width="width"
+            class="absolute-top-right"
+          />
+        </template>
+      </q-splitter>
+    </div>
+    <!--  -->
   </q-page>
 </template>
 
@@ -116,13 +198,29 @@
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
+const slide = ref(1)
+const autoplay = ref(true)
+const fullscreen = ref(false)
 const news = ref([
   { id: 1, title: 'Breaking: Quasar 2.10 Released', date: 'Nov 2, 2025' },
   { id: 2, title: 'Vue 3 Composition API Deep Dive', date: 'Nov 1, 2025' },
   { id: 3, title: 'Laravel 11 Features Announced', date: 'Oct 30, 2025' },
 ])
+
+const width = ref(400)
+const splitterModel = ref(50) // start at 50%
+const splitterStyle = computed(() => ({
+  height: Math.min(600, 0.66 * width.value) + 'px',
+  width: width.value + 'px',
+}))
+
+// we are using QResizeObserver to keep
+// this example mobile-friendly
+const onResize = (info) => {
+  width.value = info.width
+}
 
 // const visible = ref(false)
 
