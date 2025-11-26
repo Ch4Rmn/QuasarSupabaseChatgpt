@@ -1,6 +1,49 @@
 <!--  -->
 <template>
   <q-page class="q-pa-md">
+    <!-- details dialog -->
+    <!-- <q-dialog v-model="detailsDialog">
+      <q-card style="min-width: 320px; max-width: 720px">
+        <q-card-section>
+          <div class="text-h6">{{ selectedRow?.POI_N_Eng || 'Details' }}</div>
+          <div class="text-caption">{{ selectedRow?.St_N_Eng }}</div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-section class="q-pt-sm">
+          <div
+            style="display: grid; grid-template-columns: 1fr 2fr; gap: 6px 12px; font-size: 14px"
+          >
+            <div><strong>Type</strong></div>
+            <div>{{ selectedRow?.Type }}</div>
+
+            <div><strong>Sub Type</strong></div>
+            <div>{{ selectedRow?.Sub_Type }}</div>
+
+            <div><strong>Ward</strong></div>
+            <div>{{ selectedRow?.Ward_N_Eng }}</div>
+
+            <div><strong>Township</strong></div>
+            <div>{{ selectedRow?.Tsp_N_Eng }}</div>
+
+            <div><strong>District</strong></div>
+            <div>{{ selectedRow?.Dist_N_Eng }}</div>
+
+            <div><strong>Longitude</strong></div>
+            <div>{{ selectedRow?.Longitude }}</div>
+
+            <div><strong>Latitude</strong></div>
+            <div>{{ selectedRow?.Latitude }}</div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Close" color="primary" @click="detailsDialog = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog> -->
+    <!-- {{ userRole }} -->
     <div class="row">
       <!-- show skeleton while loading -->
       <div v-if="loading" class="q-pa-md" style="width: 100%">
@@ -70,7 +113,6 @@
 
       <!-- real table -->
       <q-table
-        @row-click="openDialog"
         v-else
         title="POI List"
         style="width: 100%"
@@ -231,41 +273,6 @@
           </q-td>
         </template>
       </q-table>
-      <q-dialog v-model="detailDialog">
-        <q-card style="min-width: 350px">
-          <q-card-section>
-            <div class="text-h6">{{ selectedRow?.POI_N_Eng }}</div>
-            <div class="text-subtitle2">Type: {{ selectedRow?.Type }}</div>
-            <div class="text-caption">Township: {{ selectedRow?.Tsp_N_Eng }}</div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-section>
-            <div><b>Street:</b> {{ selectedRow?.St_N_Eng }}</div>
-            <div><b>Ward:</b> {{ selectedRow?.Ward_N_Eng }}</div>
-            <div><b>District:</b> {{ selectedRow?.Dist_N_Eng }}</div>
-
-            <div class="q-mt-sm">
-              <b>Location:</b>
-              <q-btn
-                flat
-                dense
-                color="primary"
-                @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
-              >
-                {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
-              </q-btn>
-            </div>
-
-            <div class="q-mt-sm"><b>Verify Date:</b> {{ selectedRow?.Verify_date }}</div>
-          </q-card-section>
-
-          <q-card-actions align="right">
-            <q-btn flat label="Close" color="primary" v-close-popup />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
     </div>
   </q-page>
 </template>
@@ -364,14 +371,6 @@ const handleList = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const detailDialog = ref(false)
-const selectedRow = ref(null)
-
-function openDialog(evt, row) {
-  selectedRow.value = row
-  detailDialog.value = true
 }
 
 async function startRealtime() {
