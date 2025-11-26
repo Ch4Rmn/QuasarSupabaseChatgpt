@@ -61,7 +61,6 @@
     <q-table
       title="POI List"
       flat
-      dense
       bordered
       :pagination="pagination"
       :filter="filter"

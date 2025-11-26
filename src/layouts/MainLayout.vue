@@ -8,7 +8,7 @@
           </q-avatar>
           <q-toolbar-title>
             <!-- <q-tab to="/" clickable> -->
-            DPSMAP
+            <!-- DPSMAP -->
             <!-- </q-tab> -->
           </q-toolbar-title>
           <q-space />
