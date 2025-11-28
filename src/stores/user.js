@@ -15,7 +15,14 @@ export const useUserApiStore = defineStore('userapi', {
       try {
         const cached = localStorage.getItem(`cache_${table}`)
         if (cached) {
-          this.cache[table] = JSON.parse(cached)
+          // this.cache[table] = JSON.parse(cached)
+          const parsed = JSON.parse(cached)
+          const now = Date.now()
+
+          // Check if cache is still valid (20 minutes = 1200000 ms)
+          if (parsed.timestamp && now - parsed.timestamp < 5 * 60 * 1000) {
+            this.cache[table] = parsed.data
+          }
 
           Notify.create({
             progress: true,
@@ -54,36 +61,52 @@ export const useUserApiStore = defineStore('userapi', {
 
     async listWithOutCache(table) {
       try {
-        // Start loading
-        this.loading = true
+        const cached = localStorage.getItem(`cache_${table}`)
+        if (cached) {
+          // this.cache[table] = JSON.parse(cached)
+          const parsed = JSON.parse(cached)
+          const now = Date.now()
 
-        // Fetch from Supabase
-        const { data, error } = await supabase.from(table).select('id')
+          // Check if cache is still valid (20 minutes = 1200000 ms)
+          if (parsed.timestamp && now - parsed.timestamp < 5 * 60 * 1000) {
+            this.cache[table] = parsed.data
+          }
+
+          Notify.create({
+            progress: true,
+            type: 'positive',
+            message: 'Loaded from cache!',
+          })
+
+          return this.cache[table]
+        }
+
+        this.loading = true
+        const { data, error } = await supabase.from(table).select('*')
         this.loading = false
 
         if (error) throw new Error(error.message)
 
-        // Success notification
         Notify.create({
           progress: true,
           type: 'positive',
           message: 'Loaded from Supabase!',
         })
 
+        this.cache[table] = data
+        localStorage.setItem(`cache_${table}`, JSON.stringify(data))
+
         return data
       } catch (err) {
         this.loading = false
-
-        // Error notification
         Notify.create({
           progress: true,
           type: 'negative',
           message: err.message || 'Something went wrong',
         })
-
-        return null
       }
     },
+
     async clearCache(table) {
       delete this.cache[table]
       localStorage.removeItem(`cache_${table}`)
