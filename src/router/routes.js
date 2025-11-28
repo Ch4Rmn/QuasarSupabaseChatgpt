@@ -14,6 +14,7 @@ import LinksPage from 'src/pages/subpages/LinksPage.vue'
 import BusinessPage from 'src/pages/subpages/BusinessPage.vue'
 import MapPage from 'src/pages/subpages/MapPage.vue'
 import AddressPage from 'src/pages/subpages/AddressPage.vue'
+import NotifactionPage from 'src/pages/subpages/NotifactionPage.vue'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 
@@ -56,6 +57,7 @@ const routes = [
       { path: 'businessList', name: 'business', component: BusinessPage },
       { path: 'addressList', name: 'address', component: AddressPage },
       { path: 'map', name: 'map', component: MapPage },
+      { path: 'notifaction', name: 'notifaction', component: NotifactionPage },
       // { path: '', name: 'about', component: HomePage },
     ],
   },

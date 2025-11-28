@@ -134,34 +134,7 @@
     </div>
 
     <!--  -->
-    <div class="overflow-hidden">
-      <q-resize-observer @resize="onResize" :debounce="0" />
 
-      <q-splitter
-        id="photos"
-        v-model="splitterModel"
-        :limits="[0, 100]"
-        :style="splitterStyle"
-        before-class="overflow-hidden"
-        after-class="overflow-hidden"
-      >
-        <template v-slot:before>
-          <img
-            src="https://cdn.quasar.dev/img/parallax1.jpg"
-            :width="width"
-            class="absolute-top-left"
-          />
-        </template>
-
-        <template v-slot:after>
-          <img
-            src="https://cdn.quasar.dev/img/parallax1-bw.jpg"
-            :width="width"
-            class="absolute-top-right"
-          />
-        </template>
-      </q-splitter>
-    </div>
     <!--  -->
   </q-page>
 </template>
@@ -198,7 +171,7 @@
 </style>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 const slide = ref(1)
 const autoplay = ref(true)
@@ -209,18 +182,8 @@ const news = ref([
   { id: 3, title: 'Laravel 11 Features Announced', date: 'Oct 30, 2025' },
 ])
 
-const width = ref(400)
-const splitterModel = ref(50) // start at 50%
-const splitterStyle = computed(() => ({
-  height: Math.min(600, 0.66 * width.value) + 'px',
-  width: width.value + 'px',
-}))
-
 // we are using QResizeObserver to keep
 // this example mobile-friendly
-const onResize = (info) => {
-  width.value = info.width
-}
 
 // const visible = ref(false)
 

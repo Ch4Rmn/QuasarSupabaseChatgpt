@@ -31,6 +31,9 @@
             :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
             class="q-mr-sm"
           />
+          <q-btn flat @click="goNotifaction" dense color="black" icon="email" class="q-ml-md">
+            <q-badge color="red" floating>4</q-badge>
+          </q-btn>
           <q-btn-dropdown flat icon="account_circle" label="">
             <q-list>
               <q-item clickable v-close-popup @click="goUser">
@@ -136,6 +139,10 @@ function refresh(done) {
     window.location.reload()
     done()
   }, 3000)
+}
+
+const goNotifaction = () => {
+  router.push('/notifaction')
 }
 
 // i18n
