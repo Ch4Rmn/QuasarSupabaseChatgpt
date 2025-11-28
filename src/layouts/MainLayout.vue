@@ -32,7 +32,8 @@
             class="q-mr-sm"
           />
           <q-btn flat @click="goNotifaction" dense color="black" icon="email" class="q-ml-md">
-            <q-badge color="red" floating>4</q-badge>
+            <q-badge color="red" floating> {{ promoCountStore.countPromo }}</q-badge>
+            <!-- <q-badge color="red" floating> 4</q-badge> -->
           </q-btn>
           <q-btn-dropdown flat icon="account_circle" label="">
             <q-list>
@@ -126,6 +127,12 @@ import { useAuthStore } from 'stores/auth'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
+import { usePromoCountStore } from 'src/stores/promoCount'
+// import { usePromoStore } from 'src/stores/promo'
+
+// const promoStore = usePromoStore()
+const promoCountStore = usePromoCountStore()
+// console.log(promoCountStore.countPromo)
 
 const { locale } = useI18n()
 const auth = useAuthStore()
@@ -142,6 +149,7 @@ function refresh(done) {
 }
 
 const goNotifaction = () => {
+  promoCountStore.reset()
   router.push('/notifaction')
 }
 

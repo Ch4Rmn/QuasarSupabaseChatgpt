@@ -13,7 +13,6 @@ export const useUserApiStore = defineStore('userapi', {
   actions: {
     async list(table) {
       try {
-        // 1️ Check cache
         const cached = localStorage.getItem(`cache_${table}`)
         if (cached) {
           this.cache[table] = JSON.parse(cached)
@@ -27,7 +26,6 @@ export const useUserApiStore = defineStore('userapi', {
           return this.cache[table]
         }
 
-        // 2️ Fetch from Supabase
         this.loading = true
         const { data, error } = await supabase.from(table).select('*')
         this.loading = false
@@ -40,7 +38,6 @@ export const useUserApiStore = defineStore('userapi', {
           message: 'Loaded from Supabase!',
         })
 
-        // 3️ Save to cache
         this.cache[table] = data
         localStorage.setItem(`cache_${table}`, JSON.stringify(data))
 
@@ -55,6 +52,38 @@ export const useUserApiStore = defineStore('userapi', {
       }
     },
 
+    async listWithOutCache(table) {
+      try {
+        // Start loading
+        this.loading = true
+
+        // Fetch from Supabase
+        const { data, error } = await supabase.from(table).select('id')
+        this.loading = false
+
+        if (error) throw new Error(error.message)
+
+        // Success notification
+        Notify.create({
+          progress: true,
+          type: 'positive',
+          message: 'Loaded from Supabase!',
+        })
+
+        return data
+      } catch (err) {
+        this.loading = false
+
+        // Error notification
+        Notify.create({
+          progress: true,
+          type: 'negative',
+          message: err.message || 'Something went wrong',
+        })
+
+        return null
+      }
+    },
     async clearCache(table) {
       delete this.cache[table]
       localStorage.removeItem(`cache_${table}`)

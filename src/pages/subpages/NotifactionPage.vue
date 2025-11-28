@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md window-height" style="max-width: 600px">
+  <div class="q-pa-md window-height full-width">
     <q-card>
       <q-tabs
         v-model="tab"
@@ -63,8 +63,12 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
+// import { usePromoStore } from 'src/stores/promo'
+
+// const promoStore = usePromoStore()
 
 const rows = ref([])
+// const countPromo = ref()
 
 const userStore = useUserApiStore()
 const router = useRouter()
@@ -80,8 +84,12 @@ function goPromotions(id) {
 const handleList = async () => {
   loading.value = true
   try {
-    const data = await userStore.list('promotions')
+    const data = await userStore.listWithOutCache('promotions')
     rows.value = Array.isArray(data) ? data : []
+    // countPromo.value = rows.value.length
+    // promoStore.countPromo = rows.value.length
+    // console.log('length', promoStore.countPromo)
+
     console.log('Fetched rows:', rows.value)
   } catch (err) {
     console.error(err)
