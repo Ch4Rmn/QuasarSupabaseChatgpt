@@ -61,7 +61,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
 // import { usePromoStore } from 'src/stores/promo'
 
@@ -71,14 +71,15 @@ const rows = ref([])
 // const countPromo = ref()
 
 const userStore = useUserApiStore()
-const router = useRouter()
+// const router = useRouter()
 
 const tab = ref('Notifactions')
 const loading = ref(false)
 
 // go to promotions page
-function goPromotions(id) {
-  router.push(`/promotions/${id}`)
+function goPromotions(url) {
+  // alert(url)
+  window.open(url)
 }
 
 const handleList = async () => {
