@@ -100,8 +100,23 @@
           <div><strong>District:</strong> {{ selectedRow.Dist_N_Eng }}</div>
           <div><strong>Country:</strong> {{ selectedRow.Country_N }}</div>
           <div><strong>Postal Code:</strong> {{ selectedRow.Postal_Cod }}</div>
-          <div><strong>Latitude:</strong> {{ selectedRow.Latitude }}</div>
-          <div><strong>Longitude:</strong> {{ selectedRow.Longitude }}</div>
+          <div class="q-mt-sm">
+            <b>Location:</b>
+            <q-btn
+              flat
+              dense
+              color="primary"
+              @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
+            >
+              {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
+            </q-btn>
+          </div>
+          <div>
+            <QRCodeVue
+              :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
+              :size="200"
+            />
+          </div>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -115,6 +130,7 @@
 import { ref, computed, onMounted } from 'vue'
 // import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
+import QRCodeVue from 'qrcode.vue'
 
 // const router = useRouter()
 const userStore = useUserApiStore()
@@ -148,6 +164,14 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 25,
 })
+
+function goMap(lat, lng) {
+  // router.push(`/map?lat=${lat}&lng=${lng}`)
+  window.open(
+    `https://www.google.com/maps/@${lat},${lng},15z?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D`,
+    '_blank',
+  )
+}
 
 // options start
 const countryOptions = computed(() =>

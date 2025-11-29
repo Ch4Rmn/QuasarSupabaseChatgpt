@@ -15,7 +15,7 @@ export const useUserApiStore = defineStore('userapi', {
       try {
         const cached = localStorage.getItem(`cache_${table}`)
         if (cached) {
-          // this.cache[table] = JSON.parse(cached)
+          this.cache[table] = JSON.parse(cached)
           const parsed = JSON.parse(cached)
           const now = Date.now()
 

@@ -257,8 +257,14 @@
                 {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
               </q-btn>
             </div>
+            <div>
+              <QRCodeVue
+                :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
+                :size="200"
+              />
+            </div>
 
-            <div class="q-mt-sm"><b>Verify Date:</b> {{ selectedRow?.Verify_date }}</div>
+            <!-- <div class="q-mt-sm"><b>Verify Date:</b> {{ selectedRow?.Verify_date }}</div> -->
           </q-card-section>
 
           <q-card-actions align="right">
@@ -275,8 +281,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useQuasar, exportFile } from 'quasar'
 import { useUserApiStore } from 'src/stores/user'
 import { useAuthStore } from 'stores/auth'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { supabase } from 'src/boot/supabase'
+import QRCodeVue from 'qrcode.vue'
 
 const pagination = ref({
   page: 1,
@@ -287,7 +294,7 @@ const pagination = ref({
 //     <p>User ID: {{ auth.user?.id }}</p>
 //     <p>User Created_at: {{ auth.user?.created_at }}</p>
 
-const router = useRouter()
+// const router = useRouter()
 const $q = useQuasar()
 const auth = useAuthStore()
 const user = useUserApiStore()
@@ -303,7 +310,11 @@ const userStore = useUserApiStore()
 // }
 
 function goMap(lat, lng) {
-  router.push(`/map?lat=${lat}&lng=${lng}`)
+  // router.push(`/map?lat=${lat}&lng=${lng}`)
+  window.open(
+    `https://www.google.com/maps/@${lat},${lng},15z?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D`,
+    '_blank',
+  )
 }
 
 const loadUserRole = async () => {
