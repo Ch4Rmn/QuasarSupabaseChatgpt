@@ -5,10 +5,12 @@
       သင့်အက်ပ်ကို အသုံးပြုမယ့်အတွက် လမ်းညွှန်ချက်တွေကို ဖော်ပြထားပါတယ်။
     </div>
 
-    <!-- <q-carousel v-model="slide" animated> -->
-    <!-- <q-carousel-slide name="1" img-src="statics/intro1.png" /> -->
-    <!-- <q-carousel-slide name="2" img-src="statics/intro2.png" /> -->
-    <!-- <q-carousel-slide name="3" img-src="statics/intro3.png"> -->
+    <q-image src="../../assets/welcome.png" />
+
+    <!-- <q-carousel v-model="slide" animated arrows navigation infinite> -->
+    <!-- <q-carousel-slide name="1" img-src="../../assets/welcome.png" /> -->
+    <!-- <q-carousel-slide name="2" img-src="../../assets/welcome.png" /> -->
+    <!-- <q-carousel-slide name="3" img-src="../../assets/welcome.png"> -->
     <q-btn label="Get Started" color="primary" @click="finishOnboarding" />
     <!-- </q-carousel-slide> -->
     <!-- </q-carousel> -->
