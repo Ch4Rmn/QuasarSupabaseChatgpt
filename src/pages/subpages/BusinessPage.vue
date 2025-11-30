@@ -259,7 +259,7 @@
             </div>
             <div>
               <QRCodeVue
-                :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
+                :value="`https://www.google.com/maps/place/${selectedRow.Latitude},${selectedRow.Longitude}`"
                 :size="200"
               />
             </div>
@@ -311,10 +311,7 @@ const userStore = useUserApiStore()
 
 function goMap(lat, lng) {
   // router.push(`/map?lat=${lat}&lng=${lng}`)
-  window.open(
-    `https://www.google.com/maps/@${lat},${lng},15z?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D`,
-    '_blank',
-  )
+  window.open(`https://www.google.com/maps?q=${lat},${lng}&z=15`, '_blank')
 }
 
 const loadUserRole = async () => {

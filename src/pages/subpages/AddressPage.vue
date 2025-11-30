@@ -106,14 +106,21 @@
               flat
               dense
               color="primary"
-              @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
+              @click="
+                goMap(
+                  selectedRow.Latitude,
+                  selectedRow.Longitude,
+                  selectedRow.HN_Eng,
+                  selectedRow.Ward_N_Eng,
+                )
+              "
             >
               {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
             </q-btn>
           </div>
           <div>
             <QRCodeVue
-              :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
+              :value="`https://www.google.com/maps/place/${selectedRow.Latitude},${selectedRow.Longitude}`"
               :size="200"
             />
           </div>
@@ -166,9 +173,11 @@ const pagination = ref({
 })
 
 function goMap(lat, lng) {
+  // const label = `${hn} ${ward}`
   // router.push(`/map?lat=${lat}&lng=${lng}`)
   window.open(
-    `https://www.google.com/maps/@${lat},${lng},15z?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D`,
+    `https://www.google.com/maps?q=${lat},${lng}&z=15`,
+    // `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=15`,
     '_blank',
   )
 }
