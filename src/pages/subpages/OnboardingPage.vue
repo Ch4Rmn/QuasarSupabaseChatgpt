@@ -6,7 +6,7 @@
     </div>
 
     <q-image src="../../assets/welcome.png" />
-
+    <!-- TODO -->
     <!-- <q-carousel v-model="slide" animated arrows navigation infinite> -->
     <!-- <q-carousel-slide name="1" img-src="../../assets/welcome.png" /> -->
     <!-- <q-carousel-slide name="2" img-src="../../assets/welcome.png" /> -->
