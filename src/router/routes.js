@@ -16,7 +16,7 @@ import BusinessPage from 'src/pages/subpages/BusinessPage.vue'
 import MapPage from 'src/pages/subpages/MapPage.vue'
 import AddressPage from 'src/pages/subpages/AddressPage.vue'
 import NotifactionPage from 'src/pages/subpages/NotifactionPage.vue'
-import { LocalStorage } from 'quasar'
+// import { LocalStorage } from 'quasar'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 // import SearchPage from 'src/pages/subpages/SearchPage.vue'
 
@@ -24,12 +24,12 @@ const requireAuth = async (to, from, next) => {
   const { data, error } = await supabase.auth.getSession()
 
   if (error || !data.session) {
-    const done = LocalStorage.getItem('onboarding_done')
-    if (!done) {
-      next('/auth/onboarding')
-    } else {
-      next('/auth/login')
-    }
+    // const done = LocalStorage.getItem('onboarding_done')
+    // if (!done) {
+    // next('/auth/onboarding')
+    // } else {
+    next('/auth/login')
+    // }
   } else {
     next()
   }
