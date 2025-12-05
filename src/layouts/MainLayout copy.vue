@@ -65,12 +65,8 @@
         <router-view />
       </q-page-container>
 
-      <q-footer
-        bordered
-        class="text-white"
-        style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(7px)"
-      >
-        <q-tabs align="justify" dense active-color="black" indicator-color="transparent">
+      <q-footer bordered class="bg-white text-primary">
+        <q-tabs align="justify" dense active-color="white" indicator-color="transparent">
           <q-route-tab
             icon="home"
             :label="$t('home')"
