@@ -171,7 +171,8 @@
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { Device } from '@capacitor/device'
 
 const slide = ref(1)
 const autoplay = ref(true)
@@ -181,6 +182,30 @@ const news = ref([
   { id: 2, title: 'Vue 3 Composition API Deep Dive', date: 'Nov 1, 2025' },
   { id: 3, title: 'Laravel 11 Features Announced', date: 'Oct 30, 2025' },
 ])
+
+const logDeviceInfo = async () => {
+  const info = await Device.getInfo()
+
+  console.log(info)
+}
+
+const logBatteryInfo = async () => {
+  const info = await Device.getBatteryInfo()
+  if (info) {
+    console.log(info)
+  }
+}
+
+const logLanguageCode = async () => {
+  const info = await Device.getLanguageCode()
+  console.log(info)
+}
+
+onMounted(() => {
+  logDeviceInfo()
+  logBatteryInfo()
+  logLanguageCode()
+})
 
 // we are using QResizeObserver to keep
 // this example mobile-friendly
