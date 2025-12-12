@@ -31,6 +31,15 @@
             :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
             class="q-mr-sm"
           />
+          <!--  -->
+          <q-icon
+            :name="isOnline ? 'wifi' : 'signal_wifi_off'"
+            :color="isOnline ? 'white' : 'red-5'"
+            size="28px"
+          >
+            <q-tooltip>{{ isOnline ? 'Online' : 'Offline' }}</q-tooltip>
+          </q-icon>
+          <!--  -->
           <q-btn flat @click="goNotifaction" dense color="black" icon="email" class="q-ml-md">
             <q-badge color="red" floating> {{ promoCountStore.countPromo }}</q-badge>
             <!-- <q-badge color="red" floating> 4</q-badge> -->
@@ -43,7 +52,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item clickable v-close-popup @click="logout">
+              <q-item clickable v-close-popup :disable="!isOnline" @click="logout">
                 <q-item-section>
                   <q-item-label>Logout</q-item-label>
                 </q-item-section>
@@ -132,11 +141,15 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { usePromoCountStore } from 'src/stores/promoCount'
+import { useNetwork } from 'src/composables/UseNetwork'
+
 // import { usePromoStore } from 'src/stores/promo'
 
 // const promoStore = usePromoStore()
 const promoCountStore = usePromoCountStore()
 // console.log(promoCountStore.countPromo)
+
+const { isOnline } = useNetwork()
 
 const { locale } = useI18n()
 const auth = useAuthStore()
