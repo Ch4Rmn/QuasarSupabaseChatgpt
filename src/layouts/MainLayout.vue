@@ -1,138 +1,138 @@
 <template>
-  <q-pull-to-refresh @refresh="refresh">
-    <q-layout view="hHh lpR fFf">
-      <q-header elevated class="bg-primary glossy text-white">
-        <q-toolbar>
-          <q-avatar square size="40px" class="q-m-sm">
-            <img src="../assets/logo.png" alt="user" />
-          </q-avatar>
-          <q-toolbar-title>
-            <!-- <q-tab to="/" clickable> -->
-            <!-- DPSMAP -->
-            <!-- </q-tab> -->
-          </q-toolbar-title>
-          <q-space />
+  <!-- <q-pull-to-refresh @refresh="refresh"> -->
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary glossy text-white">
+      <q-toolbar>
+        <q-avatar square size="40px" class="q-m-sm">
+          <img src="../assets/logo.png" alt="user" />
+        </q-avatar>
+        <q-toolbar-title>
+          <!-- <q-tab to="/" clickable> -->
+          <!-- DPSMAP -->
+          <!-- </q-tab> -->
+        </q-toolbar-title>
+        <q-space />
 
-          <q-select
-            v-model="locale"
-            :options="langs"
-            dense
-            outlined
-            emit-value
-            map-options
-            style="width: 120px"
-            @update:model-value="switchLang"
-          />
-          <q-btn
-            flat
-            round
-            dense
-            @click="toggleDarkMode"
-            :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
-            class="q-mr-sm"
-          />
-          <!--  -->
-          <q-icon
-            :name="isOnline ? 'wifi' : 'signal_wifi_off'"
-            :color="isOnline ? 'white' : 'red-5'"
-            size="28px"
-          >
-            <q-tooltip>{{ isOnline ? 'Online' : 'Offline' }}</q-tooltip>
-          </q-icon>
-          <!--  -->
-          <q-btn flat @click="goNotifaction" dense color="black" icon="email" class="q-ml-md">
-            <q-badge color="red" floating> {{ promoCountStore.countPromo }}</q-badge>
-            <!-- <q-badge color="red" floating> 4</q-badge> -->
-          </q-btn>
-          <q-btn-dropdown flat icon="account_circle" label="">
-            <q-list>
-              <q-item clickable v-close-popup @click="goUser">
-                <q-item-section>
-                  <q-item-label>User</q-item-label>
-                </q-item-section>
-              </q-item>
+        <q-select
+          v-model="locale"
+          :options="langs"
+          dense
+          outlined
+          emit-value
+          map-options
+          style="width: 120px"
+          @update:model-value="switchLang"
+        />
+        <q-btn
+          flat
+          round
+          dense
+          @click="toggleDarkMode"
+          :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
+          class="q-mr-sm"
+        />
+        <!--  -->
+        <q-icon
+          :name="isOnline ? 'wifi' : 'signal_wifi_off'"
+          :color="isOnline ? 'white' : 'red-5'"
+          size="28px"
+        >
+          <q-tooltip>{{ isOnline ? 'Online' : 'Offline' }}</q-tooltip>
+        </q-icon>
+        <!--  -->
+        <q-btn flat @click="goNotifaction" dense color="black" icon="email" class="q-ml-md">
+          <q-badge color="red" floating> {{ promoCountStore.countPromo }}</q-badge>
+          <!-- <q-badge color="red" floating> 4</q-badge> -->
+        </q-btn>
+        <q-btn-dropdown flat icon="account_circle" label="">
+          <q-list>
+            <q-item clickable v-close-popup @click="goUser">
+              <q-item-section>
+                <q-item-label>User</q-item-label>
+              </q-item-section>
+            </q-item>
 
-              <q-item clickable v-close-popup :disable="!isOnline" @click="logout">
-                <q-item-section>
-                  <q-item-label>Logout</q-item-label>
-                </q-item-section>
-              </q-item>
+            <q-item clickable v-close-popup :disable="!isOnline" @click="logout">
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+              </q-item-section>
+            </q-item>
 
-              <q-item clickable v-close-popup @click="onItemClick">
-                <q-item-section>
-                  <q-item-label>Setting</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
+            <q-item clickable v-close-popup @click="onItemClick">
+              <q-item-section>
+                <q-item-label>Setting</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
 
-          <!-- <q-btn flat label="Logout" color="negative" @click="logout" /> -->
-        </q-toolbar>
-      </q-header>
+        <!-- <q-btn flat label="Logout" color="negative" @click="logout" /> -->
+      </q-toolbar>
+    </q-header>
 
-      <q-page-container>
-        <router-view />
-      </q-page-container>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
 
-      <q-footer
-        bordered
-        class="text-white"
-        style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(7px)"
-      >
-        <q-tabs align="justify" dense active-color="black" indicator-color="transparent">
-          <q-route-tab
-            icon="home"
-            :label="$t('home')"
-            to="/"
-            exact
-            active-class="tab-active"
-            ripple
-          />
+    <q-footer
+      bordered
+      class="text-white"
+      style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(7px)"
+    >
+      <q-tabs align="justify" dense active-color="black" indicator-color="transparent">
+        <q-route-tab
+          icon="home"
+          :label="$t('home')"
+          to="/"
+          exact
+          active-class="tab-active"
+          ripple
+        />
 
-          <q-route-tab
-            icon="link"
-            :label="$t('links')"
-            to="/links"
-            active-class="tab-active"
-            ripple
-          />
+        <q-route-tab
+          icon="link"
+          :label="$t('links')"
+          to="/links"
+          active-class="tab-active"
+          ripple
+        />
 
-          <q-route-tab
-            icon="category"
-            :label="$t('business')"
-            to="/businessList"
-            active-class="tab-active"
-            ripple
-          />
+        <q-route-tab
+          icon="category"
+          :label="$t('business')"
+          to="/businessList"
+          active-class="tab-active"
+          ripple
+        />
 
-          <q-route-tab
-            icon="home work"
-            :label="$t('address')"
-            to="/addressList"
-            active-class="tab-active"
-            ripple
-          />
+        <q-route-tab
+          icon="home work"
+          :label="$t('address')"
+          to="/addressList"
+          active-class="tab-active"
+          ripple
+        />
 
-          <!-- <q-route-tab
+        <!-- <q-route-tab
             icon="info"
             :label="$t('about')"
             to="/about"
             active-class="tab-active"
             ripple
           /> -->
-          <!-- sds -->
+        <!-- sds -->
 
-          <q-route-tab
-            icon="person"
-            :label="$t('user')"
-            to="/profile"
-            active-class="tab-active"
-            ripple
-          />
-        </q-tabs>
-      </q-footer>
-    </q-layout>
-  </q-pull-to-refresh>
+        <q-route-tab
+          icon="person"
+          :label="$t('user')"
+          to="/profile"
+          active-class="tab-active"
+          ripple
+        />
+      </q-tabs>
+    </q-footer>
+  </q-layout>
+  <!-- </q-pull-to-refresh> -->
 </template>
 
 <script setup>
@@ -158,12 +158,12 @@ const $q = useQuasar()
 
 $q.addressbarColor.set('#a2e3fa')
 
-function refresh(done) {
-  setTimeout(() => {
-    window.location.reload()
-    done()
-  }, 3000)
-}
+// function refresh(done) {
+//   setTimeout(() => {
+//     window.location.reload()
+//     done()
+//   }, 3000)
+// }
 
 const goNotifaction = () => {
   promoCountStore.reset()

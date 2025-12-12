@@ -135,11 +135,11 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
 import QRCodeVue from 'qrcode.vue'
 
-// const router = useRouter()
+const router = useRouter()
 const userStore = useUserApiStore()
 
 const rows = ref([])
@@ -173,13 +173,13 @@ const pagination = ref({
 })
 
 function goMap(lat, lng) {
-  // const label = `${hn} ${ward}`
-  // router.push(`/map?lat=${lat}&lng=${lng}`)
-  window.open(
-    `https://www.google.com/maps?q=${lat},${lng}&z=15`,
-    // `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=15`,
-    '_blank',
-  )
+  // const label = `${hn} ${ward}`,
+  router.push(`/map?lat=${lat}&lng=${lng}`)
+  // window.open(
+  //   `https://www.google.com/maps?q=${lat},${lng}&z=15`,
+  //   // `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=15`,
+  //   '_blank',
+  // )
 }
 
 // options start

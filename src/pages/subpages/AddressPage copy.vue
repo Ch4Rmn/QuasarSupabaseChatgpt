@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <!-- Filters -->
+    <!-- filter -->
     <div class="row q-gutter-md q-mb-md">
       <q-select
         outlined
@@ -13,7 +13,6 @@
         option-value="value"
         emit-value
         map-options
-        clearable
         class="min-width-200"
         placeholder="Select Country"
       />
@@ -29,8 +28,8 @@
         :loading="loading"
         emit-value
         map-options
-        clearable
       />
+
       <q-select
         outlined
         dense
@@ -41,9 +40,8 @@
         option-value="value"
         emit-value
         map-options
-        clearable
       />
-      <!--  -->
+
       <q-select
         outlined
         dense
@@ -52,27 +50,25 @@
         :options="homeNumberOptions"
         option-label="label"
         option-value="value"
-        :loading="loading"
         emit-value
         map-options
-        clearable
         class="min-width-200"
         placeholder="Select HomeNumber"
       />
     </div>
 
+    <!-- table -->
     <q-table
       title="POI List"
       flat
-      dense
       bordered
       :pagination="pagination"
       :filter="filter"
       :rows="filteredRows"
       :columns="columns"
       row-key="ID"
+      @row-click="showDetail"
     >
-      <!-- Search bar in table header -->
       <template v-slot:top-right>
         <q-input
           bordered
@@ -84,52 +80,81 @@
           outlined
           class="q-ml-md"
         >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
+          <template #append><q-icon name="search" /></template>
         </q-input>
       </template>
-
-      <template v-slot:body-cell-Longitude="props">
-        <q-td :props="props">
-          <q-btn flat dense color="primary" @click="goMap(props.row.Latitude, props.row.Longitude)">
-            {{ props.row.Longitude }}
-          </q-btn>
-        </q-td>
-      </template>
-
-      <template v-slot:body-cell-Latitude="props">
-        <q-td :props="props">
-          <q-btn flat dense color="primary" @click="goMap(props.row.Latitude, props.row.Longitude)">
-            {{ props.row.Latitude }}
-          </q-btn>
-        </q-td>
-      </template>
     </q-table>
+
+    <!-- dialog -->
+    <q-dialog v-model="dialog">
+      <q-card>
+        <q-card-section class="text-h6 text-primary"> Address Details </q-card-section>
+
+        <q-card-section v-if="selectedRow">
+          <div><strong>ID:</strong> {{ selectedRow.ID }}</div>
+          <div><strong>DPS ID:</strong> {{ selectedRow.DPS_ID }}</div>
+          <div><strong>Home Number:</strong> {{ selectedRow.HN_Eng }}</div>
+          <div><strong>Street:</strong> {{ selectedRow.St_N_Eng }}</div>
+          <div><strong>Ward:</strong> {{ selectedRow.Ward_N_Eng }}</div>
+          <div><strong>Township:</strong> {{ selectedRow.Tsp_N_Eng }}</div>
+          <div><strong>District:</strong> {{ selectedRow.Dist_N_Eng }}</div>
+          <div><strong>Country:</strong> {{ selectedRow.Country_N }}</div>
+          <div><strong>Postal Code:</strong> {{ selectedRow.Postal_Cod }}</div>
+          <div class="q-mt-sm">
+            <b>Location:</b>
+            <q-btn
+              flat
+              dense
+              color="primary"
+              @click="
+                goMap(
+                  selectedRow.Latitude,
+                  selectedRow.Longitude,
+                  selectedRow.HN_Eng,
+                  selectedRow.Ward_N_Eng,
+                )
+              "
+            >
+              {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
+            </q-btn>
+          </div>
+          <div>
+            <QRCodeVue
+              :value="`https://www.google.com/maps/place/${selectedRow.Latitude},${selectedRow.Longitude}`"
+              :size="200"
+            />
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Close" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { useUserApiStore } from 'src/stores/user'
+import QRCodeVue from 'qrcode.vue'
 
-const router = useRouter()
+// const router = useRouter()
 const userStore = useUserApiStore()
+
 const rows = ref([])
 const loading = ref(false)
 const filter = ref('')
 
-// Select box models
 const selectedCountry = ref(null)
 const selectedTownship = ref(null)
 const selectedStreet = ref(null)
 const selectedHomeNumber = ref(null)
 
-// Table columns
+// col
 const columns = [
-  { name: 'ID', label: 'ID', field: 'ID', align: 'left' },
-  { name: 'DPS_ID', label: 'DPS ID', field: 'DPS_ID', align: 'left' },
+  // { name: 'ID', label: 'ID', field: 'ID', align: 'left' },
+  // { name: 'DPS_ID', label: 'DPS ID', field: 'DPS_ID', align: 'left' },
   { name: 'HN_Eng', label: 'HN Eng', field: 'HN_Eng', align: 'left' },
   { name: 'HN_Myn', label: 'HN Myn', field: 'HN_Myn', align: 'left' },
   { name: 'Postal_Cod', label: 'Postal Code', field: 'Postal_Cod', align: 'left' },
@@ -147,35 +172,45 @@ const pagination = ref({
   rowsPerPage: 25,
 })
 
-// Computed options for select boxes
+function goMap(lat, lng) {
+  // const label = `${hn} ${ward}`
+  // router.push(`/map?lat=${lat}&lng=${lng}`)
+  window.open(
+    `https://www.google.com/maps?q=${lat},${lng}&z=15`,
+    // `https://www.google.com/maps?q=${lat},${lng}(${encodeURIComponent(label)})&z=15`,
+    '_blank',
+  )
+}
+
+// options start
 const countryOptions = computed(() =>
   [...new Set(rows.value.map((r) => r.Country_N))]
-    .filter((v) => v !== null && v !== undefined && v !== '')
+    .filter((v) => v)
     .map((v) => ({ label: v, value: v })),
 )
 
-const townshipOptions = computed(() => {
-  return rows.value
+const townshipOptions = computed(() =>
+  rows.value
     .filter((r) => !selectedCountry.value || r.Country_N === selectedCountry.value)
     .map((r) => r.Tsp_N_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+    .filter((v, i, arr) => v && arr.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v })),
+)
 
-const streetOptions = computed(() => {
-  return rows.value
+const streetOptions = computed(() =>
+  rows.value
     .filter(
       (r) =>
         (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
         (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value),
     )
     .map((r) => r.St_N_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+    .filter((v, i, arr) => v && arr.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v })),
+)
 
-const homeNumberOptions = computed(() => {
-  return rows.value
+const homeNumberOptions = computed(() =>
+  rows.value
     .filter(
       (r) =>
         (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
@@ -183,46 +218,44 @@ const homeNumberOptions = computed(() => {
         (!selectedStreet.value || r.St_N_Eng === selectedStreet.value),
     )
     .map((r) => r.HN_Eng)
-    .filter((v, i, a) => v && a.indexOf(v) === i)
-    .map((v) => ({ label: v, value: v }))
-})
+    .filter((v, i, arr) => v && arr.indexOf(v) === i)
+    .map((v) => ({ label: v, value: v })),
+)
 
-// Filtered rows based on select boxes
+// filter rows start
 const filteredRows = computed(() =>
-  rows.value.filter((r) => {
-    return (
+  rows.value.filter(
+    (r) =>
       (!selectedCountry.value || r.Country_N === selectedCountry.value) &&
       (!selectedTownship.value || r.Tsp_N_Eng === selectedTownship.value) &&
       (!selectedStreet.value || r.St_N_Eng === selectedStreet.value) &&
-      (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value)
-    )
-  }),
+      (!selectedHomeNumber.value || r.HN_Eng === selectedHomeNumber.value),
+  ),
 )
+// filter rows end
 
-const goMap = (lat, lng) => {
-  router.push(`/map?lat=${lat}&lng=${lng}`)
+// dialog show start
+const dialog = ref(false)
+const selectedRow = ref(null)
+
+const showDetail = (event, row) => {
+  selectedRow.value = row
+  dialog.value = true
 }
+// dialog show end
 
-// Load data
 const handleList = async () => {
   loading.value = true
   try {
     const data = await userStore.list('address_list')
-    // console.log('Data from API:', data)
     rows.value = Array.isArray(data) ? data : []
-    // console.log('ROWS LENGTH:', rows.value.length)
-    // console.log('FIRST ROW:', rows.value[0])
   } catch (err) {
-    console.error('handleList error', err)
+    console.error(err)
     rows.value = []
   } finally {
     loading.value = false
   }
 }
-
-// console.log('ONE ROW:', rows.value[0])
-
-// console.log(`data is row` + rows.value[0])
 
 onMounted(async () => {
   await handleList()
