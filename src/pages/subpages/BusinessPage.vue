@@ -281,7 +281,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useQuasar, exportFile } from 'quasar'
 import { useUserApiStore } from 'src/stores/user'
 import { useAuthStore } from 'stores/auth'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { supabase } from 'src/boot/supabase'
 import QRCodeVue from 'qrcode.vue'
 
@@ -294,7 +294,7 @@ const pagination = ref({
 //     <p>User ID: {{ auth.user?.id }}</p>
 //     <p>User Created_at: {{ auth.user?.created_at }}</p>
 
-// const router = useRouter()
+const router = useRouter()
 const $q = useQuasar()
 const auth = useAuthStore()
 const user = useUserApiStore()
@@ -310,8 +310,8 @@ const userStore = useUserApiStore()
 // }
 
 function goMap(lat, lng) {
-  // router.push(`/map?lat=${lat}&lng=${lng}`)
-  window.open(`https://www.google.com/maps?q=${lat},${lng}&z=15`, '_blank')
+  router.push(`/map?lat=${lat}&lng=${lng}`)
+  // window.open(`https://www.google.com/maps?q=${lat},${lng}&z=15`, '_blank')
 }
 
 const loadUserRole = async () => {

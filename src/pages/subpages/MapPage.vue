@@ -193,7 +193,14 @@ onMounted(async () => {
   L.marker([destLat, destLng], { icon: redIcon }).addTo(map)
 
   // --- 3. TRACKING ---
-  map.locate({ setView: false, watch: true, enableHighAccuracy: true })
+  map.locate({
+    setView: false,
+    watch: true,
+    enableHighAccuracy: true,
+    timeout: 10000,
+    // maxZoom: 16,
+    maximumAge: 0,
+  })
 
   map.on('locationfound', (e) => {
     loading.value = false
