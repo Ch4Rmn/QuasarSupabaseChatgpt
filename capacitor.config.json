@@ -2,5 +2,12 @@
   "appId": "com.quasar.linhtutkyaw",
   "appName": "quasarsupabasechatgpt",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "StatusBar": {
+      "style": "light", 
+      "backgroundColor": "#FFFFFF", 
+      "overlaysWebView": false 
+    }
+  }
 }
