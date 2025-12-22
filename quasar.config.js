@@ -19,6 +19,7 @@ export default defineConfig((ctx) => {
       'i18n',
       'axios',
       'supabase',
+      'onesignal',
       //  'addressbar-color', 'checkOnboarding'
     ],
 

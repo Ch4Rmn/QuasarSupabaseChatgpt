@@ -24,6 +24,7 @@
     "leaflet": "^1.9.4",
     "leaflet-minimap": "^3.6.1",
     "leaflet-routing-machine": "^3.2.12",
+    "onesignal-cordova-plugin": "^5.2.19",
     "pinia": "^3.0.1",
     "qrcode.vue": "^3.6.0",
     "quasar": "^2.16.0",
