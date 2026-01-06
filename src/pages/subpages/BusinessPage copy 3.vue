@@ -8,17 +8,17 @@
               <th class="text-left" style="width: 150px">
                 <q-skeleton animation="blink" type="text" />
               </th>
-              <th v-for="n in 10" :key="n" class="text-right">
+              <th v-for="n in 8" :key="n" class="text-right">
                 <q-skeleton animation="blink" type="text" />
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="n in 20" :key="n">
+            <tr v-for="n in 15" :key="n">
               <td class="text-left">
                 <q-skeleton animation="blink" type="text" width="85px" />
               </td>
-              <td v-for="i in 5" :key="i" class="text-right">
+              <td v-for="i in 8" :key="i" class="text-right">
                 <q-skeleton animation="blink" type="text" width="50px" />
               </td>
             </tr>
@@ -84,20 +84,14 @@
                   <table style="border-collapse: collapse; font-size: 13px">
                     <tr>
                       <td style="padding: 0 6px 2px 0; font-weight: 600">Myanmar</td>
-                      <td style="padding: 0 0 2px 6px" class="text-primary">
+                      <td style="padding: 0 0 2px 6px" class="text-primary font-myanmar">
                         {{ toUni(props.row.POI_N_Zaw) }}
                       </td>
                     </tr>
                     <tr>
-                      <td style="padding: 0 6px 2px 0; font-weight: 600">English</td>
-                      <td style="padding: 0 0 2px 6px" class="text-primary">
-                        {{ props.row.POI_N_Eng }}
-                      </td>
-                    </tr>
-                    <!-- <tr>
                       <td style="padding: 0 6px 0 0; font-weight: 600">Win</td>
                       <td style="padding: 0 0 0 6px">{{ props.row.POI_N_Win }}</td>
-                    </tr> -->
+                    </tr>
                     <tr>
                       <td style="padding: 0 6px 2px 0; font-weight: 600">Street</td>
                       <td style="padding: 0 0 2px 6px">{{ props.row.St_N_Eng }}</td>
@@ -138,13 +132,13 @@
               outlined
               dense
               options-dense
-              display-value="Columns"
+              display-value="Cols"
               emit-value
               map-options
               :options="columns"
               option-value="name"
               option-label="label"
-              style="min-width: 100px"
+              style="min-width: 80px"
             />
           </div>
 
@@ -190,149 +184,67 @@
 
         <template v-slot:body-cell-action="props" v-if="isDesktop && userRole == 'admin'">
           <q-td :props="props" class="q-gutter-x-sm">
-            <q-btn color="primary" dense label="Edit" />
-            <q-btn color="negative" dense label="Destroy" />
+            <q-btn color="primary" dense label="Edit" size="sm" />
+            <q-btn color="negative" dense label="Del" size="sm" />
           </q-td>
         </template>
       </q-table>
 
-      <q-dialog
-        v-model="detailDialog"
-        transition-show="slide-up"
-        transition-hide="slide-down"
-        position="bottom"
-      >
-        <q-card
-          style="
-            width: 100%;
-            max-width: 600px;
-            border-radius: 20px 20px 0 0;
-            background-color: #f2f2f7;
-          "
-        >
-          <div class="row justify-center q-pt-sm">
-            <div style="width: 40px; height: 5px; background: #c5c5c7; border-radius: 10px"></div>
-          </div>
+      <q-dialog v-model="detailDialog">
+        <q-card style="min-width: 350px">
+          <q-card-section>
+            <div class="text-h6">{{ selectedRow?.POI_N_Eng }}</div>
+            <div class="text-subtitle2 text-grey">Type: {{ selectedRow?.Type }}</div>
+            <div class="text-caption">Township: {{ selectedRow?.Tsp_N_Eng }}</div>
+          </q-card-section>
 
-          <div class="row items-center justify-between q-px-md q-pt-md">
-            <div class="text-h6 text-weight-bold text-black">Detail View</div>
-            <q-btn
-              round
-              flat
-              dense
-              color="grey-8"
-              icon="close"
-              class="bg-grey-3"
-              style="border-radius: 50%"
-              v-close-popup
-            />
-          </div>
+          <q-separator />
 
-          <q-card-section class="q-pa-md scroll" style="max-height: 80vh">
-            <div class="text-center q-mb-lg">
-              <div class="ios-grouped-list q-pa-md flex flex-center column">
-                <div class="text-caption text-grey-6 q-mb-md">SCAN TO SHARE</div>
-                <div ref="qrCodeRef">
-                  <QRCodeVue
-                    v-if="selectedRow"
-                    :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
-                    :size="160"
-                    level="M"
-                    render-as="canvas"
-                  />
-                </div>
+          <q-card-section>
+            <div class="q-gutter-y-xs">
+              <div><b>Street:</b> {{ selectedRow?.St_N_Eng }}</div>
+              <div><b>Ward:</b> {{ selectedRow?.Ward_N_Eng }}</div>
+              <div><b>District:</b> {{ selectedRow?.Dist_N_Eng }}</div>
+
+              <div class="row items-center q-mt-sm">
+                <b>Location:</b>
                 <q-btn
                   flat
+                  dense
+                  no-caps
                   color="primary"
-                  label="Save Image"
-                  class="q-mt-sm full-width text-weight-bold"
-                  @click="downloadQR"
+                  icon="map"
+                  label="Open Map"
+                  @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
+                  class="q-ml-sm"
                 />
               </div>
-              <div class="text-h5 text-weight-bold q-mt-xs">
-                {{ toUni(selectedRow?.POI_N_Zaw) }}
+            </div>
+
+            <div class="q-mt-md flex flex-center column">
+              <div ref="qrCodeRef" class="q-pa-sm bg-white">
+                <QRCodeVue
+                  v-if="selectedRow"
+                  :value="`https://www.google.com/maps/place/${selectedRow.Latitude},${selectedRow.Longitude}`"
+                  :size="200"
+                  level="H"
+                />
               </div>
-              <div class="text-subtitle1 text-grey-7">
-                {{ selectedRow?.POI_N_Eng }}
-              </div>
-              <q-chip
+
+              <q-btn
+                color="primary"
+                icon="download"
+                label="Download QR"
                 size="sm"
-                color="blue"
-                text-color="white"
-                :label="selectedRow?.Type"
                 class="q-mt-sm"
+                @click="downloadQR"
               />
             </div>
-
-            <div class="ios-grouped-list q-mb-md">
-              <q-list separator>
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-orange">
-                      <q-icon name="apartment" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Township</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <span class="text-black">{{ selectedRow?.Tsp_N_Eng }}</span>
-                  </q-item-section>
-                </q-item>
-
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-green">
-                      <q-icon name="signpost" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Ward</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <span class="text-black">{{ selectedRow?.Ward_N_Eng }}</span>
-                  </q-item-section>
-                </q-item>
-
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-blue">
-                      <q-icon name="edit_road" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Street</q-item-label>
-                    <q-item-label caption>{{ selectedRow?.St_N_Eng }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-
-            <div class="ios-grouped-list q-mb-md">
-              <q-list separator>
-                <q-item
-                  clickable
-                  v-ripple
-                  @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
-                >
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-red">
-                      <q-icon name="map" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-primary text-body1">Open in Maps</q-item-label>
-                    <q-item-label caption
-                      >{{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}</q-item-label
-                    >
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-icon name="chevron_right" color="grey-4" />
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
           </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Close" color="primary" v-close-popup />
+          </q-card-actions>
         </q-card>
       </q-dialog>
     </div>
@@ -347,7 +259,7 @@ import { useAuthStore } from 'stores/auth'
 // import { useRouter } from 'vue-router'
 import { supabase } from 'src/boot/supabase'
 import QRCodeVue from 'qrcode.vue'
-// ✅ Safe Rabbit Node Import
+// Rabbit Node Import (Safe Check applied below)
 import * as rabbit from 'rabbit-node'
 
 // --- 1. SETUP & UTILS ---
@@ -357,15 +269,15 @@ const auth = useAuthStore()
 const user = useUserApiStore()
 const userStore = useUserApiStore()
 
-// Safe Converter Function
+// Zawgyi to Unicode Converter
 const toUni = (text) => {
   if (!text) return ''
-  // Try to find the correct function depending on import structure
+  // Safety check for Rabbit Node import structure
   const converter = rabbit.zg2uni || (rabbit.default && rabbit.default.zg2uni)
   if (typeof converter === 'function') {
     return converter(text)
   }
-  return text
+  return text // Return original if converter fails
 }
 
 // --- 2. STATE ---
@@ -419,13 +331,13 @@ const columns = [
 
 // --- 5. LOGIC: COMPUTED OPTIONS & FILTERING ---
 
-// Generate Unique Township Options
+// Generate Unique Township Options from Data
 const townshipOptions = computed(() => {
   const unique = [...new Set(rows.value.map((row) => row.Tsp_N_Eng))]
   return unique.filter(Boolean).sort()
 })
 
-// Generate Unique Type Options
+// Generate Unique Type Options from Data
 const typeOptions = computed(() => {
   const unique = [...new Set(rows.value.map((row) => row.Type))]
   return unique.filter(Boolean).sort()
@@ -473,20 +385,40 @@ const refresh = async () => {
 }
 
 function goMap(lat, lng) {
-  // router.push(`/map?lat=${lat}&lng=${lng}`)
-  window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank')
+  // Open in new tab
+  window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank')
 }
 
-// Dialog Logic
+// --- 7. DIALOG & QR DOWNLOAD LOGIC ---
 const detailDialog = ref(false)
 const selectedRow = ref(null)
+const qrCodeRef = ref(null) // 🔥 Reference for QR Element
 
 function openDialog(evt, row) {
   selectedRow.value = row
   detailDialog.value = true
 }
 
-// --- 7. REALTIME ---
+// Function to Download QR Code
+const downloadQR = () => {
+  const canvas = qrCodeRef.value?.querySelector('canvas')
+  if (!canvas) {
+    $q.notify({ type: 'negative', message: 'QR Code not found' })
+    return
+  }
+
+  // Convert canvas to image URL
+  const image = canvas.toDataURL('image/png')
+
+  // Create fake link and click it
+  const link = document.createElement('a')
+  link.href = image
+  // Name the file: "KFC_Sule.png"
+  link.download = `${selectedRow.value?.POI_N_Eng || 'qrcode'}.png`
+  link.click()
+}
+
+// --- 8. REALTIME ---
 async function startRealtime() {
   if (realtimeChannel.value) return
   realtimeChannel.value = supabase
@@ -504,7 +436,7 @@ async function stopRealtime() {
   realtimeChannel.value = null
 }
 
-// --- 8. EXPORT CSV ---
+// --- 9. EXPORT CSV ---
 function wrapCsvValue(val, formatFn, row) {
   let formatted = formatFn !== void 0 ? formatFn(val, row) : val
   formatted = formatted === void 0 || formatted === null ? '' : String(formatted)
@@ -513,7 +445,7 @@ function wrapCsvValue(val, formatFn, row) {
 }
 
 const exportTable = () => {
-  // Use filteredRows so we export only what we see
+  // Use filteredRows so we export only what user sees
   const dataToExport = filteredRows.value
 
   const content = [columns.map((col) => wrapCsvValue(col.label))]
@@ -540,7 +472,7 @@ const exportTable = () => {
   }
 }
 
-// --- 9. LIFECYCLE ---
+// --- 10. LIFECYCLE ---
 onMounted(() => {
   loadUserRole()
   handleList()
@@ -554,14 +486,13 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .my-sticky-header-table {
-  /* height or max-height is important */
-  height: calc(100vh - 100px);
+  /* Height adjusted to fit screen better with new headers */
+  height: calc(100vh - 120px);
 }
 
 .q-table__top,
 .q-table__bottom,
 thead tr:first-child th {
-  /* bg color is important for th; just specify one */
   background-color: #fff;
 }
 
@@ -572,30 +503,9 @@ thead tr th {
 thead tr:first-child th {
   top: 0;
 }
-bg-ios-gray {
-  background-color: #f2f2f7;
-}
 
-/* The White Rounded Group Box */
-.ios-grouped-list {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden; /* Ensures children don't bleed out corners */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* The Colorful Icons on the left */
-.ios-icon-box {
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* To ensure text matches iOS feel */
-.text-body1 {
-  font-size: 16px;
+/* Optional: Font fix for Myanmar text if needed */
+.font-myanmar {
+  font-family: 'Pyidaungsu', 'Myanmar3', sans-serif;
 }
 </style>

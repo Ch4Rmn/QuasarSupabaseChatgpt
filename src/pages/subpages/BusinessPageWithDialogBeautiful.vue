@@ -196,141 +196,124 @@
         </template>
       </q-table>
 
-      <q-dialog
-        v-model="detailDialog"
-        transition-show="slide-up"
-        transition-hide="slide-down"
-        position="bottom"
-      >
-        <q-card
-          style="
-            width: 100%;
-            max-width: 600px;
-            border-radius: 20px 20px 0 0;
-            background-color: #f2f2f7;
-          "
-        >
-          <div class="row justify-center q-pt-sm">
-            <div style="width: 40px; height: 5px; background: #c5c5c7; border-radius: 10px"></div>
-          </div>
+      <q-dialog v-model="detailDialog" transition-show="scale" transition-hide="scale">
+        <q-card style="width: 100%; max-width: 450px" class="q-pa-none">
+          <q-img src="https://cdn.quasar.dev/img/material.png" style="height: 120px">
+            <div class="absolute-bottom bg-transparent">
+              <div class="text-h5 text-weight-bold shadow-2">
+                {{ toUni(selectedRow?.POI_N_Zaw) }}
+              </div>
+              <div class="text-subtitle2 opacity-80">
+                {{ selectedRow?.POI_N_Eng }}
+              </div>
+            </div>
 
-          <div class="row items-center justify-between q-px-md q-pt-md">
-            <div class="text-h6 text-weight-bold text-black">Detail View</div>
             <q-btn
               round
               flat
               dense
-              color="grey-8"
               icon="close"
-              class="bg-grey-3"
-              style="border-radius: 50%"
+              class="absolute-top-right q-ma-sm text-white bg-black-opacity"
               v-close-popup
             />
-          </div>
+          </q-img>
 
-          <q-card-section class="q-pa-md scroll" style="max-height: 80vh">
-            <div class="text-center q-mb-lg">
-              <div class="ios-grouped-list q-pa-md flex flex-center column">
-                <div class="text-caption text-grey-6 q-mb-md">SCAN TO SHARE</div>
-                <div ref="qrCodeRef">
-                  <QRCodeVue
-                    v-if="selectedRow"
-                    :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
-                    :size="160"
-                    level="M"
-                    render-as="canvas"
-                  />
-                </div>
-                <q-btn
-                  flat
-                  color="primary"
-                  label="Save Image"
-                  class="q-mt-sm full-width text-weight-bold"
-                  @click="downloadQR"
-                />
-              </div>
-              <div class="text-h5 text-weight-bold q-mt-xs">
-                {{ toUni(selectedRow?.POI_N_Zaw) }}
-              </div>
-              <div class="text-subtitle1 text-grey-7">
-                {{ selectedRow?.POI_N_Eng }}
-              </div>
+          <q-card-section class="q-pt-md">
+            <div class="row items-center justify-between q-mb-md">
               <q-chip
-                size="sm"
-                color="blue"
+                icon="place"
+                color="primary"
                 text-color="white"
                 :label="selectedRow?.Type"
-                class="q-mt-sm"
+                class="q-ma-none"
               />
+              <span class="text-caption text-grey"> Sort ID: {{ selectedRow?.Sort_ID }} </span>
             </div>
 
-            <div class="ios-grouped-list q-mb-md">
-              <q-list separator>
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-orange">
-                      <q-icon name="apartment" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Township</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <span class="text-black">{{ selectedRow?.Tsp_N_Eng }}</span>
-                  </q-item-section>
-                </q-item>
+            <q-list bordered separator class="rounded-borders">
+              <q-item>
+                <q-item-section avatar>
+                  <q-icon name="location_city" color="primary" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label caption>Township & District</q-item-label>
+                  <q-item-label class="text-weight-medium">
+                    {{ selectedRow?.Tsp_N_Eng }}
+                  </q-item-label>
+                  <q-item-label caption>{{ selectedRow?.Dist_N_Eng }}</q-item-label>
+                </q-item-section>
+              </q-item>
 
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-green">
-                      <q-icon name="signpost" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Ward</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <span class="text-black">{{ selectedRow?.Ward_N_Eng }}</span>
-                  </q-item-section>
-                </q-item>
+              <q-item>
+                <q-item-section avatar>
+                  <q-icon name="signpost" color="orange-8" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label caption>Street Address</q-item-label>
+                  <q-item-label>{{ selectedRow?.St_N_Eng }}</q-item-label>
+                  <q-item-label caption>Ward: {{ selectedRow?.Ward_N_Eng }}</q-item-label>
+                </q-item-section>
+              </q-item>
 
-                <q-item class="q-py-md">
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-blue">
-                      <q-icon name="edit_road" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-body1">Street</q-item-label>
-                    <q-item-label caption>{{ selectedRow?.St_N_Eng }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
+              <q-item
+                clickable
+                v-ripple
+                @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
+              >
+                <q-item-section avatar>
+                  <q-icon name="my_location" color="green-7" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label caption>GPS Coordinates</q-item-label>
+                  <q-item-label
+                    class="text-primary text-weight-bold"
+                    style="font-family: monospace"
+                  >
+                    {{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-icon name="open_in_new" size="xs" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+
+            <q-btn
+              color="primary"
+              icon="map"
+              label="Open in Google Maps"
+              class="full-width q-mt-md shadow-1"
+              @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
+            />
+          </q-card-section>
+
+          <q-separator inset />
+
+          <q-card-section class="bg-grey-1">
+            <div class="text-center text-caption text-grey-7 q-mb-sm">
+              Scan to share this location
             </div>
 
-            <div class="ios-grouped-list q-mb-md">
-              <q-list separator>
-                <q-item
-                  clickable
-                  v-ripple
-                  @click="goMap(selectedRow.Latitude, selectedRow.Longitude)"
-                >
-                  <q-item-section avatar>
-                    <div class="ios-icon-box bg-red">
-                      <q-icon name="map" color="white" size="20px" />
-                    </div>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-primary text-body1">Open in Maps</q-item-label>
-                    <q-item-label caption
-                      >{{ selectedRow?.Latitude }}, {{ selectedRow?.Longitude }}</q-item-label
-                    >
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-icon name="chevron_right" color="grey-4" />
-                  </q-item-section>
-                </q-item>
-              </q-list>
+            <div class="flex flex-center column">
+              <div ref="qrCodeRef" class="bg-white q-pa-sm shadow-2 rounded-borders">
+                <QRCodeVue
+                  v-if="selectedRow"
+                  :value="`https://www.google.com/maps?q=${selectedRow.Latitude},${selectedRow.Longitude}`"
+                  :size="180"
+                  level="M"
+                />
+              </div>
+
+              <q-btn
+                flat
+                dense
+                no-caps
+                color="primary"
+                icon="download"
+                label="Save QR Image"
+                class="q-mt-sm"
+                @click="downloadQR"
+              />
             </div>
           </q-card-section>
         </q-card>
@@ -572,30 +555,7 @@ thead tr th {
 thead tr:first-child th {
   top: 0;
 }
-bg-ios-gray {
-  background-color: #f2f2f7;
-}
-
-/* The White Rounded Group Box */
-.ios-grouped-list {
-  background-color: white;
-  border-radius: 12px;
-  overflow: hidden; /* Ensures children don't bleed out corners */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* The Colorful Icons on the left */
-.ios-icon-box {
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* To ensure text matches iOS feel */
-.text-body1 {
-  font-size: 16px;
+.bg-black-opacity {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 </style>
