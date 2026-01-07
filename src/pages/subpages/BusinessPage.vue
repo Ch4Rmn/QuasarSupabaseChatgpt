@@ -43,6 +43,7 @@
         :visible-columns="visibleColumns"
         :pagination="pagination"
         @update:pagination="(val) => (pagination = val)"
+        :rows-per-page-options="[10, 25, 50, 100]"
       >
         <template v-slot:body-cell-Longitude="props">
           <q-td :props="props">
@@ -555,7 +556,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .my-sticky-header-table {
   /* height or max-height is important */
-  height: calc(100vh - 100px);
+  height: calc(100vh - 150px);
 }
 
 .q-table__top,

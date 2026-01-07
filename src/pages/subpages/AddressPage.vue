@@ -94,7 +94,9 @@
           <div><strong>ID:</strong> {{ selectedRow.ID }}</div>
           <div><strong>DPS ID:</strong> {{ selectedRow.DPS_ID }}</div>
           <div><strong>Home Number:</strong> {{ selectedRow.HN_Eng }}</div>
+          <div><strong>Home Number:</strong> {{ selectedRow.HN_Myn }}</div>
           <div><strong>Street:</strong> {{ selectedRow.St_N_Eng }}</div>
+          <div><strong>Street:</strong> {{ selectedRow.St_N_Myn }}</div>
           <div><strong>Ward:</strong> {{ selectedRow.Ward_N_Eng }}</div>
           <div><strong>Township:</strong> {{ selectedRow.Tsp_N_Eng }}</div>
           <div><strong>District:</strong> {{ selectedRow.Dist_N_Eng }}</div>
@@ -159,9 +161,13 @@ const columns = [
   { name: 'HN_Myn', label: 'HN Myn', field: 'HN_Myn', align: 'left' },
   { name: 'Postal_Cod', label: 'Postal Code', field: 'Postal_Cod', align: 'left' },
   { name: 'St_N_Eng', label: 'Street Eng', field: 'St_N_Eng', align: 'left' },
+  { name: 'St_N_Myn', label: 'Street Myn', field: 'St_N_Myn', align: 'left' },
   { name: 'Ward_N_Eng', label: 'Ward Eng', field: 'Ward_N_Eng', align: 'left' },
+  { name: 'Ward_N_Myn', label: 'Ward Myn', field: 'Ward_N_Myn', align: 'left' },
   { name: 'Tsp_N_Eng', label: 'Township Eng', field: 'Tsp_N_Eng', align: 'left' },
+  { name: 'Tsp_N_Myn', label: 'Township Myn', field: 'Tsp_N_Myn', align: 'left' },
   { name: 'Dist_N_Eng', label: 'District Eng', field: 'Dist_N_Eng', align: 'left' },
+  { name: 'Dist_N_Myn', label: 'District Myn', field: 'Dist_N_Myn', align: 'left' },
   { name: 'Country_N', label: 'Country', field: 'Country_N', align: 'left' },
   { name: 'Longitude', label: 'Longitude', field: 'Longitude', align: 'left' },
   { name: 'Latitude', label: 'Latitude', field: 'Latitude', align: 'left' },
