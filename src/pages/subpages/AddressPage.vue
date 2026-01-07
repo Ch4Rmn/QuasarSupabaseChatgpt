@@ -247,8 +247,9 @@ const showDetail = (event, row) => {
 const handleList = async () => {
   loading.value = true
   try {
-    const data = await userStore.list('address_list')
+    const data = await userStore.list('address')
     rows.value = Array.isArray(data) ? data : []
+    console.log(rows.value)
   } catch (err) {
     console.error(err)
     rows.value = []

@@ -9,16 +9,6 @@
     </div>
     <br />
 
-    <div class="text-h6 q-mb-md">Latest News</div>
-
-    <q-list bordered>
-      <q-item v-for="n in news" :key="n.id">
-        <q-item-section>
-          <q-item-label>{{ n.title }}</q-item-label>
-          <q-item-label caption>{{ n.date }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
     <!--  -->
     <div class="q-pa-md">
       <q-carousel
@@ -30,10 +20,10 @@
         ref="carousel"
         infinite
       >
-        <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
-        <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
-        <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
-        <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+        <q-carousel-slide :name="1" img-src="/images/quasar_cv_banner.png" />
+        <q-carousel-slide :name="2" img-src="/images/yangon.jpg" />
+        <q-carousel-slide :name="3" img-src="/images/shan.jpg" />
+        <q-carousel-slide :name="4" img-src="/images/mandalay.jpg" />
 
         <template v-slot:control>
           <q-carousel-control position="bottom-left" :offset="[18, 18]">
@@ -81,13 +71,24 @@
       </q-carousel>
     </div>
     <!--  -->
+    <div class="text-h6 q-mb-md">Latest News</div>
+
+    <q-list bordered>
+      <q-item v-for="n in news" :key="n.id">
+        <q-item-section>
+          <q-item-label>{{ n.title }}</q-item-label>
+          <q-item-label caption>{{ n.date }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+    <!--  -->
 
     <div class="q-pa-md row items-start q-gutter-md">
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
-            <div class="text-overline">Overline</div>
-            <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+            <div class="text-overline">Jpg,Vinyl</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Yangon</div>
             <div class="text-caption text-grey">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua.
@@ -95,23 +96,24 @@
           </q-card-section>
 
           <q-card-section class="col-5 flex flex-center">
-            <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-img class="rounded-borders" src="/images/yangon.jpg" />
           </q-card-section>
         </q-card-section>
 
         <q-separator />
-
+        <!--  -->
         <q-card-actions>
-          <q-btn flat round icon="event" />
+          <!-- <q-btn flat round icon="event" /> -->
           <q-btn flat> 7:30PM </q-btn>
-          <q-btn flat color="primary"> Reserve </q-btn>
+          <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
         </q-card-actions>
       </q-card>
+      <!--  -->
       <q-card class="my-card" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
-            <div class="text-overline">Overline</div>
-            <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+            <div class="text-overline">Jpg,Vinyl</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Mandalay</div>
             <div class="text-caption text-grey">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua.
@@ -119,16 +121,41 @@
           </q-card-section>
 
           <q-card-section class="col-5 flex flex-center">
-            <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-img class="rounded-borders" src="/images/mandalay.jpg" />
           </q-card-section>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions>
-          <q-btn flat round icon="event" />
+          <!-- <q-btn flat round icon="event" /> -->
           <q-btn flat> 7:30PM </q-btn>
-          <q-btn flat color="primary"> Reserve </q-btn>
+          <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
+        </q-card-actions>
+      </q-card>
+      <!--  -->
+      <q-card class="my-card" flat bordered>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+            <div class="text-overline">Jpg,Vinyl</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Shan</div>
+            <div class="text-caption text-grey">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua.
+            </div>
+          </q-card-section>
+
+          <q-card-section class="col-5 flex flex-center">
+            <q-img class="rounded-borders" src="/images/shan.jpg" />
+          </q-card-section>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <!-- <q-btn flat round icon="event" /> -->
+          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
         </q-card-actions>
       </q-card>
     </div>
@@ -199,6 +226,25 @@ const logBatteryInfo = async () => {
 const logLanguageCode = async () => {
   const info = await Device.getLanguageCode()
   console.log(info)
+}
+
+const openViberChat = () => {
+  // Format the phone number (remove any non-digit characters and add country code)
+  const phoneNumber = '959775294020' // Add country code 95 for Myanmar
+
+  // For mobile apps
+  const viberAppUrl = `viber://add?number=${phoneNumber}`
+
+  // For web fallback
+  const viberWebUrl = `https://viber.com/chat?number=${phoneNumber}`
+
+  // Try to open Viber app
+  window.location.href = viberAppUrl
+
+  // Fallback to Viber web if the app doesn't open
+  setTimeout(() => {
+    window.location.href = viberWebUrl
+  }, 500)
 }
 
 onMounted(() => {
