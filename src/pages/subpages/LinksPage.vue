@@ -63,6 +63,7 @@ const sites = ref([
     icon: 'contact_page',
   },
   { label: 'About DPSMAP', url: 'https://dpsmap.com/about', color: 'indigo', icon: 'info' },
+  { label: 'Map Print', url: 'https://maprint.dpsmap.com/', color: 'black', icon: 'print' },
 ])
 
 // 🔹 Function to open selected site in dialog

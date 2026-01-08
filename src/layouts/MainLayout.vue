@@ -131,6 +131,28 @@
         />
       </q-tabs>
     </q-footer>
+
+    <q-dialog v-model="lockDialog" persistent>
+      <q-card style="min-width: 280px">
+        <q-card-section>
+          <div class="text-h6">App Locked</div>
+          <div class="text-caption text-grey-7">Enter passcode to continue.</div>
+        </q-card-section>
+        <q-card-section>
+          <q-input
+            v-model="lockInput"
+            outlined
+            dense
+            type="password"
+            label="Passcode"
+            @keyup.enter="unlockApp"
+          />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn color="primary" label="Unlock" @click="unlockApp" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
   <!-- </q-pull-to-refresh> -->
 </template>
@@ -140,6 +162,7 @@ import { useAuthStore } from 'stores/auth'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
+import { onMounted, ref, watch } from 'vue'
 import { usePromoCountStore } from 'src/stores/promoCount'
 import { useNetwork } from 'src/composables/UseNetwork'
 
@@ -202,6 +225,44 @@ const logout = async () => {
   await auth.logout()
   router.push('/auth/login')
 }
+
+const lockDialog = ref(false)
+const lockInput = ref('')
+const lockEnabled = ref(false)
+const isUnlocked = ref(false)
+
+const syncLockState = () => {
+  lockEnabled.value = localStorage.getItem('appLockEnabled') === 'true'
+  if (!lockEnabled.value) {
+    isUnlocked.value = true
+    lockDialog.value = false
+    return
+  }
+  if (!isUnlocked.value) {
+    lockDialog.value = true
+  }
+}
+
+const unlockApp = () => {
+  if (lockInput.value === '1251') {
+    isUnlocked.value = true
+    lockDialog.value = false
+    lockInput.value = ''
+    return
+  }
+  $q.notify({ message: 'Invalid passcode', color: 'negative' })
+}
+
+watch(
+  () => router.currentRoute.value.fullPath,
+  () => {
+    syncLockState()
+  },
+)
+
+onMounted(() => {
+  syncLockState()
+})
 </script>
 
 <style scoped>

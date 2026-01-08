@@ -1,29 +1,173 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="business-page q-pa-md">
+    <div class="business-hero">
+      <div class="text-h5 text-weight-bold">POI Directory</div>
+      <div class="text-caption text-grey-7">
+        Explore verified places with fast filters and a mobile-first layout.
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-value">{{ filteredRows.length }}</div>
+          <div class="stat-label">Results</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ typeOptions.length }}</div>
+          <div class="stat-label">Types</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ townshipOptions.length }}</div>
+          <div class="stat-label">Townships</div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div v-if="loading" class="q-pa-md" style="width: 100%">
-        <q-markup-table>
-          <thead>
-            <tr>
-              <th class="text-left" style="width: 150px">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th v-for="n in 10" :key="n" class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="n in 20" :key="n">
-              <td class="text-left">
-                <q-skeleton animation="blink" type="text" width="85px" />
-              </td>
-              <td v-for="i in 5" :key="i" class="text-right">
-                <q-skeleton animation="blink" type="text" width="50px" />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+        <div v-if="isDesktop">
+          <q-markup-table>
+            <thead>
+              <tr>
+                <th class="text-left" style="width: 150px">
+                  <q-skeleton animation="blink" type="text" />
+                </th>
+                <th v-for="n in 10" :key="n" class="text-right">
+                  <q-skeleton animation="blink" type="text" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="n in 20" :key="n">
+                <td class="text-left">
+                  <q-skeleton animation="blink" type="text" width="85px" />
+                </td>
+                <td v-for="i in 5" :key="i" class="text-right">
+                  <q-skeleton animation="blink" type="text" width="50px" />
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </div>
+        <div v-else class="q-gutter-md">
+          <q-card v-for="n in 4" :key="n" flat bordered class="business-card">
+            <q-card-section class="row items-center no-wrap">
+              <q-skeleton type="QAvatar" size="48px" />
+              <div class="q-ml-md col">
+                <q-skeleton type="text" width="60%" />
+                <q-skeleton type="text" width="40%" />
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-card-section>
+              <q-skeleton type="text" width="90%" />
+              <q-skeleton type="text" width="70%" />
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+
+      <div v-else-if="!isDesktop" class="business-mobile">
+        <div class="filters-panel q-mb-md">
+          <q-input
+            bordered
+            label="Search"
+            dense
+            debounce="300"
+            color="primary"
+            v-model="filter"
+            outlined
+            class="q-mb-sm"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+
+          <div class="row q-col-gutter-sm">
+            <div class="col-6">
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="filterTownship"
+                :options="townshipOptions"
+                label="Township"
+                clearable
+              />
+            </div>
+            <div class="col-6">
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="filterType"
+                :options="typeOptions"
+                label="Type"
+                clearable
+              />
+            </div>
+          </div>
+
+          <div class="row items-center q-mt-sm">
+            <q-btn icon="refresh" color="primary" outline label="Refresh" @click="refresh" />
+            <q-space />
+            <div class="text-caption text-grey-6">
+              {{ filteredRows.length }} items
+            </div>
+          </div>
+        </div>
+
+        <div v-if="filteredRows.length === 0" class="empty-state">
+          <q-icon name="search_off" size="36px" color="grey-6" />
+          <div class="text-subtitle2 q-mt-sm">No results found</div>
+          <div class="text-caption text-grey-6">Try adjusting your filters.</div>
+        </div>
+
+        <q-card
+          v-for="row in filteredRows"
+          :key="row.Sort_ID"
+          flat
+          bordered
+          class="business-card"
+          @click="openDialog(null, row)"
+          v-ripple
+        >
+          <q-card-section class="row items-center no-wrap">
+            <q-avatar color="primary" text-color="white" size="48px">
+              {{ (row.POI_N_Eng || '').charAt(0).toUpperCase() }}
+            </q-avatar>
+            <div class="q-ml-md col">
+              <div class="text-subtitle1 text-weight-bold">
+                {{ toUni(row.POI_N_Zaw) }}
+              </div>
+              <div class="text-caption text-grey-7">{{ row.POI_N_Eng }}</div>
+            </div>
+            <q-icon name="chevron_right" color="grey-5" />
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section class="q-pt-sm">
+            <div class="row items-center q-gutter-xs">
+              <q-chip dense color="blue-1" text-color="blue-9" :label="row.Type" />
+              <q-chip dense color="grey-2" text-color="grey-9" :label="row.Tsp_N_Eng" />
+            </div>
+            <div class="text-caption text-grey-7 q-mt-sm">
+              <q-icon name="signpost" size="16px" class="q-mr-xs" />
+              {{ row.St_N_Eng || 'Unknown street' }}
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="between">
+            <q-btn
+              flat
+              color="primary"
+              icon="map"
+              label="Map"
+              @click.stop="goMap(row.Latitude, row.Longitude)"
+            />
+            <q-btn flat color="grey-8" icon="qr_code" label="Detail" />
+          </q-card-actions>
+        </q-card>
       </div>
 
       <q-table
@@ -39,7 +183,6 @@
         :rows="filteredRows"
         :columns="columns"
         row-key="Sort_ID"
-        :filter="filter"
         :visible-columns="visibleColumns"
         :pagination="pagination"
         @update:pagination="(val) => (pagination = val)"
@@ -121,74 +264,74 @@
         </template>
 
         <template v-slot:top>
-          <div class="table-top">
-            <div class="table-top__left">
-              <q-btn v-if="isDesktop && userRole == 'admin'" color="primary" label="Create" />
-              <q-btn icon="refresh" @click="refresh" color="primary" label="Refresh" />
+          <div class="row q-gutter-sm items-center no-wrap">
+            <q-btn v-if="isDesktop && userRole == 'admin'" color="primary" label="Create" />
+            <q-btn icon="refresh" @click="refresh" color="primary" label="Refresh" />
 
-              <q-btn
-                v-if="isDesktop && userRole == 'admin'"
-                color="primary"
-                icon-right="archive"
-                label="Export CSV"
-                no-caps
-                @click="exportTable"
-              />
+            <q-btn
+              v-if="isDesktop && userRole == 'admin'"
+              color="primary"
+              icon-right="archive"
+              label="Export CSV"
+              no-caps
+              @click="exportTable"
+            />
 
-              <q-select
-                v-if="isDesktop && userRole == 'admin'"
-                v-model="visibleColumns"
-                multiple
-                outlined
-                dense
-                options-dense
-                display-value="Columns"
-                emit-value
-                map-options
-                :options="columns"
-                option-value="name"
-                option-label="label"
-                class="table-top__field"
-              />
-            </div>
-
-            <div class="table-top__filters">
-              <q-select
-                outlined
-                dense
-                options-dense
-                v-model="filterTownship"
-                :options="townshipOptions"
-                label="Township"
-                clearable
-                class="table-top__field"
-              />
-              <q-select
-                outlined
-                dense
-                options-dense
-                v-model="filterType"
-                :options="typeOptions"
-                label="Type"
-                clearable
-                class="table-top__field"
-              />
-              <q-input
-                bordered
-                label="Search"
-                dense
-                debounce="300"
-                color="primary"
-                v-model="filter"
-                outlined
-                class="table-top__field"
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
-            </div>
+            <q-select
+              v-if="isDesktop && userRole == 'admin'"
+              v-model="visibleColumns"
+              multiple
+              outlined
+              dense
+              options-dense
+              display-value="Columns"
+              emit-value
+              map-options
+              :options="columns"
+              option-value="name"
+              option-label="label"
+              style="min-width: 100px"
+            />
           </div>
+
+          <q-space />
+
+          <div class="row q-gutter-sm q-mx-md">
+            <q-select
+              outlined
+              dense
+              options-dense
+              v-model="filterTownship"
+              :options="townshipOptions"
+              label="Township"
+              clearable
+              style="min-width: 140px"
+            />
+            <q-select
+              outlined
+              dense
+              options-dense
+              v-model="filterType"
+              :options="typeOptions"
+              label="Type"
+              clearable
+              style="min-width: 140px"
+            />
+          </div>
+
+          <q-input
+            bordered
+            label="Search"
+            dense
+            debounce="300"
+            color="primary"
+            v-model="filter"
+            outlined
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
         </template>
 
         <template v-slot:body-cell-action="props" v-if="isDesktop && userRole == 'admin'">
@@ -436,6 +579,8 @@ const typeOptions = computed(() => {
 
 // Main Filter Logic (Filters + Search)
 const filteredRows = computed(() => {
+  const term = (filter.value || '').toLowerCase().trim()
+
   return rows.value.filter((row) => {
     // Check Township
     const matchTownship = filterTownship.value ? row.Tsp_N_Eng === filterTownship.value : true
@@ -443,7 +588,23 @@ const filteredRows = computed(() => {
     // Check Type
     const matchType = filterType.value ? row.Type === filterType.value : true
 
-    return matchTownship && matchType
+    if (!matchTownship || !matchType) return false
+    if (!term) return true
+
+    const haystack = [
+      row.POI_N_Eng,
+      toUni(row.POI_N_Zaw),
+      row.St_N_Eng,
+      row.Tsp_N_Eng,
+      row.Type,
+      row.Sub_Type,
+      row.Ward_N_Eng,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+
+    return haystack.includes(term)
   })
 })
 
@@ -602,56 +763,70 @@ bg-ios-gray {
   font-size: 16px;
 }
 
-.table-top {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
+.business-page {
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 40%);
+}
+
+.business-hero {
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #dff3ff 0%, #fff3e8 100%);
+  box-shadow: 0 8px 20px rgba(25, 118, 210, 0.08);
+  margin-bottom: 16px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1b2430;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+}
+
+.filters-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.business-mobile {
   width: 100%;
+  display: grid;
+  gap: 14px;
 }
 
-.table-top__left {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
+.business-card {
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
-.table-top__filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin-left: auto;
-}
-
-.table-top__field {
-  min-width: 140px;
-}
-
-@media (max-width: 599px) {
-  .table-top {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .table-top__left,
-  .table-top__filters {
-    width: 100%;
-  }
-
-  .table-top__filters {
-    margin-left: 0;
-  }
-
-  .table-top__field {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .table-top__left .q-btn {
-    width: 100%;
-    justify-content: center;
-  }
+.empty-state {
+  text-align: center;
+  padding: 24px 12px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
 }
 </style>

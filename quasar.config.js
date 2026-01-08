@@ -100,6 +100,27 @@ export default defineConfig((ctx) => {
           { server: false },
         ],
       ],
+
+      extendViteConf(viteConf) {
+        viteConf.server ??= {}
+        viteConf.server.watch ??= {}
+
+        const ignoreList = [
+          '**/src-capacitor/**',
+          '**/src-cordova/**',
+          '**/android/**',
+          '**/ios/**',
+        ]
+
+        const { ignored } = viteConf.server.watch
+        if (Array.isArray(ignored)) {
+          viteConf.server.watch.ignored = [...ignored, ...ignoreList]
+        } else if (ignored) {
+          viteConf.server.watch.ignored = [ignored, ...ignoreList]
+        } else {
+          viteConf.server.watch.ignored = ignoreList
+        }
+      },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver

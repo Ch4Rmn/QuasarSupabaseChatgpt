@@ -2,7 +2,8 @@
   <q-page padding>
     <div class="marquee-wrapper">
       <div class="marquee">
-        Breaking News: DPS Maps launches new features! &nbsp; | &nbsp; Dark mode is now available!
+        Breaking News: DPS Maps launches new features! &nbsp; | &nbsp; ရန်ကုန်နှင့်
+        မြန်မာပြည်မြေပုံများ အထူးဈေးနှုန်း ( 50% လျော့ဈေး ) ဖြင့် ရယူလိုက်ပါ ( 2026 Jan 15 အထိသာ)
         &nbsp; | &nbsp; Visit dpsmap.com for more updates! &nbsp; | &nbsp; Download maps for offline
         use!
       </div>
@@ -82,9 +83,11 @@
       </q-item>
     </q-list>
     <!--  -->
+    <br />
+    <div class="text-h6 q-mb-md">Maps</div>
 
-    <div class="q-pa-md row items-start q-gutter-md">
-      <q-card class="my-card" flat bordered>
+    <div class="row items-start q-gutter-md">
+      <q-card class="my-card col-12 col-md-4" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
             <div class="text-overline">Jpg,Vinyl</div>
@@ -104,12 +107,12 @@
         <!--  -->
         <q-card-actions>
           <!-- <q-btn flat round icon="event" /> -->
-          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat> 250,000 MMK </q-btn>
           <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
         </q-card-actions>
       </q-card>
       <!--  -->
-      <q-card class="my-card" flat bordered>
+      <q-card class="my-card col-12 col-md-4" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
             <div class="text-overline">Jpg,Vinyl</div>
@@ -129,12 +132,37 @@
 
         <q-card-actions>
           <!-- <q-btn flat round icon="event" /> -->
-          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat> 250,000 MMK </q-btn>
           <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
         </q-card-actions>
       </q-card>
       <!--  -->
-      <q-card class="my-card" flat bordered>
+      <q-card class="my-card col-12 col-md-4" flat bordered>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+            <div class="text-overline">Nook</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">Yangon Township Map Book</div>
+            <div class="text-caption text-grey">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua.
+            </div>
+          </q-card-section>
+
+          <q-card-section class="col-5 flex flex-center">
+            <q-img class="rounded-borders" src="/images/book.png" />
+          </q-card-section>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions>
+          <!-- <q-btn flat round icon="event" /> -->
+          <q-btn flat> 250,000 MMK </q-btn>
+          <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
+        </q-card-actions>
+      </q-card>
+      <!--  -->
+      <q-card class="my-card col-12 col-md-4" flat bordered>
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
             <div class="text-overline">Jpg,Vinyl</div>
@@ -154,14 +182,20 @@
 
         <q-card-actions>
           <!-- <q-btn flat round icon="event" /> -->
-          <q-btn flat> 7:30PM </q-btn>
+          <q-btn flat> 250,000 MMK </q-btn>
           <q-btn flat color="primary" @click="openViberChat()"> Buy Now </q-btn>
         </q-card-actions>
       </q-card>
     </div>
 
     <!--  -->
-
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-fab color="primary" square icon="phone" direction="left">
+        <q-fab-action square @click="callPhoneNumber" color="primary" icon="call" />
+        <q-fab-action square @click="openViberChat" color="purple" icon="message" />
+        <q-fab-action square @click="openMessenger" color="blue" icon="facebook" />
+      </q-fab>
+    </q-page-sticky>
     <!--  -->
   </q-page>
 </template>
@@ -184,7 +218,7 @@
 .marquee {
   display: inline-block;
   white-space: nowrap;
-  animation: marquee 30s linear infinite;
+  animation: marquee 60s linear infinite;
 }
 
 @keyframes marquee {
@@ -245,6 +279,16 @@ const openViberChat = () => {
   setTimeout(() => {
     window.location.href = viberWebUrl
   }, 500)
+}
+
+const callPhoneNumber = () => {
+  const phoneNumber = '959775294020'
+  window.location.href = `tel:${phoneNumber}`
+}
+
+const openMessenger = () => {
+  const messengerUrl = 'https://m.me/myanmarofficedirectory' // Replace with your Facebook Page username
+  window.open(messengerUrl, '_blank')
 }
 
 onMounted(() => {
