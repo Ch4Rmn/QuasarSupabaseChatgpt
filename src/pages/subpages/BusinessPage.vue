@@ -1,6 +1,46 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row">
+      <!--  -->
+      <q-banner class="business-banner text-white">
+        <div class="business-banner__inner">
+          <!-- <div class="business-banner__icon">
+            <q-icon name="storefront" size="24px" />
+          </div> -->
+          <div class="business-banner__content">
+            <div
+              class="business-banner__title"
+              style="text-decoration: underline; cursor: pointer"
+              role="button"
+              tabindex="0"
+              @click="showBannerDesc = !showBannerDesc"
+              @keydown.enter="showBannerDesc = !showBannerDesc"
+            >
+              BusinessList အကြောင်း
+              <q-icon
+                name="expand_more"
+                size="18px"
+                class="q-ml-xs"
+                :class="{ 'rotate-180': showBannerDesc }"
+              />
+            </div>
+            <div v-show="showBannerDesc" class="business-banner__desc">
+              BusinessListဆိုသည်မှာ ရန်ကုန်မြို့ရှိ ဈေးဆိုင်များ၊စားသောက်ဆိုင်များ၊ဆေးဆိုင်များ
+              အစရှိသော data များကို တစ်စုတစည်းတည်းစုဆောင်းထားသော Database တစ်ခုဖြစ်ပါသည်။
+              လူကြီးမင်းတို့အနေနှင့် ရှာဖွေလိုသော
+              လုပ်ငန်းများ၊စားသောက်ဆိုင်များ၊စေ◌ျးဆိုင်များ၊ဆေးဆိုင်များ အစရှိသည်တို့၏ နာမည်ကို
+              အောက်တွင်ရှိသော search bar တွင် ရိုက်ရှာလိုက်ရုံဖြင့် Database ထဲတွင် ရှိပါက
+              မြို့နယ်၊ခရိုင်၊လမ်း၊Longitude၊Latitude အစရှိသည်တို့ကို ဖော်ပြပေးပါသည်။
+            </div>
+            <!-- <div class="business-banner__hint">
+              Search bar ထဲမှာ နာမည်ရိုက်ပြီး တန်းရှာနိုင်ပါတယ်။
+            </div> -->
+          </div>
+        </div>
+      </q-banner>
+      <!-- <br /> -->
+      <!--  -->
+
       <div v-if="loading" class="q-pa-md" style="width: 100%">
         <q-markup-table>
           <thead>
@@ -372,6 +412,7 @@ const toUni = (text) => {
 }
 
 // --- 2. STATE ---
+const showBannerDesc = ref(true)
 const rows = ref([])
 const loading = ref(true)
 const filter = ref('')
@@ -629,6 +670,61 @@ bg-ios-gray {
   min-width: 140px;
 }
 
+.business-banner {
+  background: linear-gradient(135deg, #1f5bd8 0%, #22b38b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 24px rgba(10, 30, 60, 0.18);
+  margin-bottom: 12px;
+}
+
+.business-banner__inner {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.business-banner__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.business-banner__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+
+.business-banner__title .q-icon {
+  transition: transform 0.2s ease;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.business-banner__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  opacity: 0.95;
+}
+
+.business-banner__hint {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  font-weight: 600;
+  font-size: 13px;
+}
+
 @media (max-width: 599px) {
   .table-top {
     flex-direction: column;
@@ -652,6 +748,10 @@ bg-ios-gray {
   .table-top__left .q-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .business-banner__inner {
+    flex-direction: column;
   }
 }
 </style>

@@ -1,5 +1,41 @@
 <template>
   <q-page class="q-pa-md">
+    <q-banner class="business-banner text-white">
+      <div class="business-banner__inner">
+        <!-- <div class="business-banner__icon">
+            <q-icon name="storefront" size="24px" />
+          </div> -->
+        <div class="business-banner__content">
+          <div
+            class="business-banner__title"
+            style="text-decoration: underline; cursor: pointer"
+            role="button"
+            tabindex="0"
+            @click="showBannerDesc = !showBannerDesc"
+            @keydown.enter="showBannerDesc = !showBannerDesc"
+          >
+            AddressList အကြောင်း
+            <q-icon
+              name="expand_more"
+              size="18px"
+              class="q-ml-xs"
+              :class="{ 'rotate-180': showBannerDesc }"
+            />
+          </div>
+          <div v-show="showBannerDesc" class="business-banner__desc">
+            Tips: ယခုစာမျက်နှာသည် မိမိသိလိုသော လိပ်စာကို ရှာဖွေနိုင်သော စာမျက်နှာဖြစ်သည်။ ပထမဦးစွာ
+            မိမိရှာချင်သော လိပ်စာမှ မြို့နယ်ကိုရွေးချယ်ပါ။ ထို့နောက် မိမိရှာလိုသောလမ်းနာမည်ကို
+            ရွေးချယ်ပါ။ နောက်ဆုံးတွင် အိမ်နံပါတ်ကိုသာရိုက်ထည့်ပါ။(ဥပမာ -555)။ ထိုအခါ
+            ထိုအချက်အလက်နှင့်ပက်သက်သော Data အသေးစိတ်ကိုပြပေးပါမည်။ ထို Data အသေးစိတ်ကို
+            မြေပုံတွင်လဲတိုက်ရိုက်ကြည့်ရှုနိုင်ပါတယ်။
+          </div>
+          <!-- <div class="business-banner__hint">
+            Search bar ထဲမှာ နာမည်ရိုက်ပြီး တန်းရှာနိုင်ပါတယ်။
+          </div> -->
+        </div>
+      </div>
+    </q-banner>
+    <br />
     <!-- filter -->
     <div class="row q-gutter-md q-mb-md">
       <q-select
@@ -84,6 +120,16 @@
         </q-input>
       </template>
     </q-table>
+    <br />
+
+    <!-- <div class="map-embed">
+      <iframe
+        src="https://www.google.com/maps/d/embed?mid=1ncyBfi0wTz9iZezIOH1fI1Ms_cJtLdk&ehbc=2E312F"
+        id="gmap"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div> -->
 
     <!-- dialog -->
     <q-dialog v-model="dialog">
@@ -144,6 +190,8 @@ import QRCodeVue from 'qrcode.vue'
 const router = useRouter()
 const userStore = useUserApiStore()
 
+// const showBanner = ref(true)
+const showBannerDesc = ref(true)
 const rows = ref([])
 const loading = ref(false)
 const filter = ref('')
@@ -280,3 +328,80 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+.business-banner {
+  background: linear-gradient(135deg, #1f5bd8 0%, #22b38b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 24px rgba(10, 30, 60, 0.18);
+  margin-bottom: 12px;
+}
+
+.business-banner__inner {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.business-banner__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.business-banner__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+
+.business-banner__title .q-icon {
+  transition: transform 0.2s ease;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.business-banner__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  opacity: 0.95;
+}
+
+.business-banner__hint {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  font-weight: 600;
+  font-size: 13px;
+}
+.business-banner__inner {
+  flex-direction: column;
+}
+
+.map-embed {
+  position: relative;
+  width: 100%;
+  padding-top: 58%;
+  border: 1px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.map-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+</style>
