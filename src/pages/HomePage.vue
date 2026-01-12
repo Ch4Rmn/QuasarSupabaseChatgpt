@@ -19,6 +19,7 @@
         v-model="slide"
         :autoplay="autoplay"
         ref="carousel"
+        class="home-carousel"
         infinite
       >
         <q-carousel-slide :name="1" img-src="/images/quasar_cv_banner.png" />
@@ -229,6 +230,18 @@
     transform: translateX(-100%);
   }
 }
+
+.home-carousel .q-carousel__slide {
+  background-position: center;
+  background-size: cover;
+}
+
+@media (max-width: 600px) {
+  .home-carousel .q-carousel__slide {
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
 </style>
 
 <script setup>
@@ -264,7 +277,7 @@ const logLanguageCode = async () => {
 
 const openViberChat = () => {
   // Format the phone number (remove any non-digit characters and add country code)
-  const phoneNumber = '959775294020' // Add country code 95 for Myanmar
+  const phoneNumber = '959775204020' // Add country code 95 for Myanmar
 
   // For mobile apps
   const viberAppUrl = `viber://add?number=${phoneNumber}`
@@ -282,7 +295,7 @@ const openViberChat = () => {
 }
 
 const callPhoneNumber = () => {
-  const phoneNumber = '959775294020'
+  const phoneNumber = '959775204020'
   window.location.href = `tel:${phoneNumber}`
 }
 

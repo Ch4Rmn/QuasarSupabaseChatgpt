@@ -1,7 +1,7 @@
 <template>
   <!-- <q-pull-to-refresh @refresh="refresh"> -->
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary glossy text-white">
+    <q-header elevated class="app-header bg-primary glossy text-white">
       <q-toolbar>
         <q-avatar square size="40px" class="q-m-sm">
           <img src="../assets/logo.png" alt="user" />
@@ -76,7 +76,7 @@
 
     <q-footer
       bordered
-      class="text-white"
+      class="app-footer text-white"
       style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(7px)"
     >
       <q-tabs align="justify" dense active-color="black" indicator-color="transparent">
@@ -266,12 +266,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.q-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
 .tab-active {
   /* background: linear-gradient(135deg, #1976d2, #2196f3); */
   background: black;

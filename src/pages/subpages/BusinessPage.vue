@@ -209,7 +209,7 @@
           style="
             width: 100%;
             max-width: 600px;
-            border-radius: 20px 20px 0 0;
+            /* border-radius: 20px 20px 0 0; */
             background-color: #f2f2f7;
           "
         >
@@ -220,7 +220,6 @@
           <div class="row items-center justify-between q-px-md q-pt-md">
             <div class="text-h6 text-weight-bold text-black">Detail View</div>
             <q-btn
-              round
               flat
               dense
               color="grey-8"
@@ -264,6 +263,7 @@
                 text-color="white"
                 :label="selectedRow?.Type"
                 class="q-mt-sm"
+                square=""
               />
             </div>
 
@@ -582,7 +582,7 @@ bg-ios-gray {
 /* The White Rounded Group Box */
 .ios-grouped-list {
   background-color: white;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   overflow: hidden; /* Ensures children don't bleed out corners */
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -591,7 +591,7 @@ bg-ios-gray {
 .ios-icon-box {
   width: 30px;
   height: 30px;
-  border-radius: 6px;
+  /* border-radius: 6px; */
   display: flex;
   align-items: center;
   justify-content: center;
